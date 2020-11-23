@@ -1,3 +1,5 @@
+package BST;
+
 public class BST {
     Node root;
 

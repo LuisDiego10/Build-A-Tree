@@ -1,3 +1,5 @@
+package BST;
+
 public class Node {
     int key ;
     Node left, right;
