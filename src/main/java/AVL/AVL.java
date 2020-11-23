@@ -1,3 +1,5 @@
+package AVL;
+
 public class AVL {
     AVLNode root;
     //Heigh of tree
