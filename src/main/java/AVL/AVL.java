@@ -85,5 +85,4 @@ public class AVL {
         tree.root = tree.insertAVL(tree.root, 25);
         System.out.println("END");
     }
-
 }
