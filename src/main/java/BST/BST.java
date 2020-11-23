@@ -1,11 +1,32 @@
 package BST;
 
+/**
+ *Class BST TREE
+ * Declare node root and contains all the methods to build the tree
+ * @author Diego
+ * @version 1.0
+ * @since 21/11/2020
+ */
 public class BST {
     Node root;
-
+    /**
+     * BST constructor
+     * @author Diego
+     * @version 1.0
+     * @since 21/11/2020
+     */
     public BST (){
         this.root = null;
     }
+    /**
+     * Method insertBST
+     * Call Recursive method
+     * @param key
+     * @return root;
+     * @author Diego
+     * @version 1.0
+     * @since 21/11/2020
+     */
     void insertBST(int key){
         root=insertRecursive(root,key);
     }
@@ -16,13 +37,20 @@ public class BST {
             return root;
         }
         //Traverse Tree
-        if (key<=root.key)     //insert in the left subtree
+        if (key<root.key)     //insert in the left subtree
             root.left=insertRecursive(root.left, key);
-        else if (key>=root.key)    //insert in the right subtree
+        else if (key>root.key)    //insert in the right subtree
             root.right=insertRecursive(root.right, key);
         // return pointer
         return root;
     }
+    /**
+     * Method inorderBST
+     * Call Recursive method inorder for show the Facts
+     * @author Diego
+     * @version 1.0
+     * @since 21/11/2020
+     */
     void inorderBST() {
         inorderRecursive(root);
     }
@@ -33,6 +61,15 @@ public class BST {
             inorderRecursive(root.right);
         }
     }
+    /**
+     * Method searchBST
+     * Call Recursive method for Search fact
+     * @param key (search)
+     * @return boolean;
+     * @author Diego
+     * @version 1.0
+     * @since 21/11/2020
+     */
     boolean searchBST(int key){
         root=searchRecursive(root,key);
         if (root!=null)
@@ -48,6 +85,13 @@ public class BST {
         return searchRecursive(root.right,key);
     }
 }
+/**
+ * Main Class
+ * Contain the instance for run Tree
+ * @author Diego
+ * @version 1.0
+ * @since 21/11/2020
+ */
 class Main{
     public static void main (String [] args){
         BST firtsBST=new BST();
@@ -60,5 +104,6 @@ class Main{
         firtsBST.inorderBST();
         boolean returnTF= firtsBST.searchBST(50);
         System.out.println(returnTF);
+        System.out.println("END");
     }
 }
