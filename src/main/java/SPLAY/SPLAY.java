@@ -84,6 +84,24 @@ public class SPLAY {
             return (root.right == null) ? root : leftRotate(root);
         }
     }
+    static SPLAYNode insertSplay(SPLAYNode root,int item){
+        if (root==null)
+            return newNode(item);
+        root=splay(root,item);
+        if (root.key==item)
+            return root;
+        SPLAYNode newnode=newNode(item);
+        if (root.key>item){
+            newnode.right=root;
+            newnode.left=root.left;
+            root.left=null;
+        } else{
+            newnode.left=root;
+            newnode.right=root.right;
+            root.right=null;
+        }
+        return newnode;
+    }
     static void preOrder(SPLAYNode root)
     {
         if (root != null)
@@ -108,8 +126,7 @@ public class SPLAY {
         root.left.left = newNode(40);
         root.left.left.left = newNode(30);
         root.left.left.left.left = newNode(20);
-
-        root = searchSPLAY(root, 20);
+        root=insertSplay(root,25);
         System.out.print("Preorder traversal of the" + " modified Splay tree is \n");
         preOrder(root);
     }
