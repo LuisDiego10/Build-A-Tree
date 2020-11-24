@@ -1,7 +1,7 @@
 package BST;
 
 /**
- *Class BST TREE
+ * Class BST
  * Declare node root and contains all the methods to build the tree
  * @author Diego
  * @version 1.0

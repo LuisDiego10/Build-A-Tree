@@ -1,7 +1,11 @@
 package SPLAY;
-
-import BST.BST;
-
+/**
+ * Class SPLAY
+ * Declare attributes and contains all the methods to build the tree
+ * @author Diego
+ * @version 1.0
+ * @since 24/11/2020
+ */
 public class SPLAY {
     static SPLAYNode newNode(int key){
         SPLAYNode node=new SPLAYNode();
@@ -16,7 +20,7 @@ public class SPLAY {
      * @return Tree rotation;
      * @author Diego
      * @version 1.0
-     * @since 22/11/2020
+     * @since 24/11/2020
      */
     //Rotation Right
     static SPLAYNode rightRotate(SPLAYNode x){
@@ -32,7 +36,7 @@ public class SPLAY {
      * @return Tree rotation;
      * @author Diego
      * @version 1.0
-     * @since 22/11/2020
+     * @since 24/11/2020
      */
     //Rotation Left
     static SPLAYNode leftRotate(SPLAYNode x){
@@ -48,7 +52,7 @@ public class SPLAY {
      * @return boolean;
      * @author Diego
      * @version 1.0
-     * @since 21/11/2020
+     * @since 24/11/2020
      */
     static SPLAYNode searchSPLAY(SPLAYNode root,int key){
         return splay(root,key);
@@ -84,6 +88,15 @@ public class SPLAY {
             return (root.right == null) ? root : leftRotate(root);
         }
     }
+    /**
+     * Method insertSplay
+     * Insert fact in the SplayTree
+     * @param root and item
+     * @return newnode;
+     * @author Diego
+     * @version 1.0
+     * @since 24/11/2020
+     */
     static SPLAYNode insertSplay(SPLAYNode root,int item){
         if (root==null)
             return newNode(item);
@@ -102,6 +115,13 @@ public class SPLAY {
         }
         return newnode;
     }
+    /**
+     * Method preOrder
+     * Call Recursive method preOrder for show the Facts
+     * @author Diego
+     * @version 1.0
+     * @since 24/11/2020
+     */
     static void preOrder(SPLAYNode root)
     {
         if (root != null)
@@ -115,7 +135,7 @@ public class SPLAY {
      * Contain the instance for run Tree
      * @author Diego
      * @version 1.0
-     * @since 21/11/2020
+     * @since 24/11/2020
      */
     // Driver code
     public static void main(String[] args)
@@ -126,6 +146,8 @@ public class SPLAY {
         root.left.left = newNode(40);
         root.left.left.left = newNode(30);
         root.left.left.left.left = newNode(20);
+        root=searchSPLAY(root,40);
+        preOrder(root);
         root=insertSplay(root,25);
         System.out.print("Preorder traversal of the" + " modified Splay tree is \n");
         preOrder(root);
