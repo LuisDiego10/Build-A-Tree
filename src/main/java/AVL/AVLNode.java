@@ -6,7 +6,7 @@ package AVL;
  * @version 1.0
  * @since 21/11/2020
  */
-public class AVLNode {
+public class AVLNode  {
     int key,height;
     AVLNode left,right;
     /**

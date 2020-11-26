@@ -1,4 +1,7 @@
 package AVL;
+
+import BST.BST;
+
 /**
  *Class AVL TREE
  * Declare node root and contains all the methods to build the tree
@@ -7,7 +10,7 @@ package AVL;
  * @since 22/11/2020
  */
 
-public class AVL {
+public class AVL extends BST {
     AVLNode root;
     //Heigh of tree
     int height(AVLNode node){
@@ -82,8 +85,13 @@ public class AVL {
         y.height=max(height(y.left),height(y.right))+1;
         return y;
     }
+
+    public AVLNode insertAVL(int key){
+        return insert(root,key);
+    }
+
     /**
-     * Method insertAVL
+     * Method insert
      * Method for execute right rotation
      * @param node and key
      * @return The insertion and balance Tree;
@@ -91,14 +99,14 @@ public class AVL {
      * @version 1.0
      * @since 22/11/2020
      */
-    AVLNode insertAVL(AVLNode node, int key){
+    public AVLNode insert(AVLNode node, int key){
         if (node==null){
             return new AVLNode(key);
         }
         if (key< node.key)
-            node.left=insertAVL(node.left,key);
+            node.left=insert(node.left,key);
         else if (key> node.key)
-            node.right=insertAVL(node.right,key);
+            node.right=insert(node.right,key);
         else
             return node;
         node.height=1+max(height(node.left),height(node.right));
@@ -133,12 +141,12 @@ public class AVL {
      */
     public static void main (String args[]) {
         AVL tree = new AVL();
-        tree.root = tree.insertAVL(tree.root, 10);
-        tree.root = tree.insertAVL(tree.root, 20);
-        tree.root = tree.insertAVL(tree.root, 30);
-        tree.root = tree.insertAVL(tree.root, 40);
-        tree.root = tree.insertAVL(tree.root, 50);
-        tree.root = tree.insertAVL(tree.root, 25);
+        tree.root = tree.insert(tree.root, 10);
+        tree.root = tree.insert(tree.root, 20);
+        tree.root = tree.insert(tree.root, 30);
+        tree.root = tree.insert(tree.root, 40);
+        tree.root = tree.insert(tree.root, 50);
+        tree.root = tree.insert(tree.root, 25);
         System.out.println("END");
     }
 }

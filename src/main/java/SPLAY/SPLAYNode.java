@@ -8,5 +8,5 @@ package SPLAY;
  */
 public class SPLAYNode {
     int key;
-    SPLAYNode left, right;
+    public SPLAYNode left, right;
 }

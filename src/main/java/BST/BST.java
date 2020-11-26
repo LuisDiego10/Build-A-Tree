@@ -1,5 +1,8 @@
 package BST;
 
+import AVL.AVLNode;
+import SPLAY.SPLAYNode;
+
 /**
  * Class BST
  * Declare node root and contains all the methods to build the tree
@@ -8,7 +11,7 @@ package BST;
  * @since 21/11/2020
  */
 public class BST {
-    Node root;
+    public Node root;
     /**
      * BST constructor
      * @author Diego
@@ -19,7 +22,7 @@ public class BST {
         this.root = null;
     }
     /**
-     * Method insertBST
+     * Method insert
      * Call Recursive method
      * @param key
      * @return root;
@@ -27,7 +30,7 @@ public class BST {
      * @version 1.0
      * @since 21/11/2020
      */
-    void insertBST(int key){
+    public void insert(int key){
         root=insertRecursive(root,key);
     }
     Node insertRecursive(Node root,int key){
@@ -84,6 +87,14 @@ public class BST {
             return searchRecursive(root.left,key);
         return searchRecursive(root.right,key);
     }
+    public AVLNode insertAVL(int key){
+        return new AVLNode(key);
+
+    }
+
+    public SPLAYNode insertSplay( int item) {
+        return new SPLAYNode();
+    }
 }
 /**
  * Main Class
@@ -95,12 +106,12 @@ public class BST {
 class Main{
     public static void main (String [] args){
         BST firtsBST=new BST();
-        firtsBST.insertBST(45);
-        firtsBST.insertBST(10);
-        firtsBST.insertBST(7);
-        firtsBST.insertBST(12);
-        firtsBST.insertBST(90);
-        firtsBST.insertBST(50);
+        firtsBST.insert(45);
+        firtsBST.insert(10);
+        firtsBST.insert(7);
+        firtsBST.insert(12);
+        firtsBST.insert(90);
+        firtsBST.insert(50);
         firtsBST.inorderBST();
         boolean returnTF= firtsBST.searchBST(50);
         System.out.println(returnTF);

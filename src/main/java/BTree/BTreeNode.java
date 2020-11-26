@@ -1,87 +1,4 @@
-package B;
-/**
- * Class Btree
- * Declare attributes and contains all the methods to build the tree
- * @author Diego
- * @version 1.0
- * @since 25/11/2020
- */
-class Btree {
-    public BTreeNode root;
-    public int t;
-
-
-    Btree(int t) {
-        this.root = null;
-        this.t = t;
-    }
-    /**
-     * Method traverse
-     * Method to traverse the tree
-     * @author Diego
-     * @version 1.0
-     * @since 25/11/2020
-     */
-    public void traverse() {
-        if (this.root != null)
-            this.root.traverse();
-        System.out.println();
-    }
-    /**
-     * Method search
-     * Method to search a key in this tree
-     * @author Diego
-     * @version 1.0
-     * @since 25/11/2020
-     */
-    public BTreeNode searchBTree(int k) {
-        if (this.root == null)
-            return null;
-        else
-            return this.root.search(k);
-    }
-    /**
-     * Method insertBTree
-     * Method to insert a key in this tree
-     * @author Diego
-     * @version 1.0
-     * @since 25/11/2020
-     */
-    public void insertBTree (int k){
-        if (this.root==null){
-            this.root=new BTreeNode(t,true);
-            this.root.keys[0]=k;
-            this.root.n=1;
-        }else{
-            if(this.root.n==2*t-1){
-                BTreeNode s =new BTreeNode(t,false);
-                s.C[0]=this.root;
-                s.splitChild(0,this.root);
-                int i=0;
-                if (s.keys[0]<k)
-                    i++;
-                s.C[i].insertNonFull(k);
-                this.root=s;
-            }
-            else{
-                root.insertNonFull(k);
-            }
-        }
-    }
-    public static void main(String[] args) {
-        Btree b = new Btree(3);
-        b.insertBTree(10);
-        b.insertBTree(20);
-        b.insertBTree(5);
-        b.insertBTree(6);
-        b.insertBTree(12);
-        b.insertBTree(30);
-        b.insertBTree(7);
-        b.insertBTree(17);
-        System.out.println(b.searchBTree(1897));
-        b.traverse();
-    }
-}
+package BTree;
 
 /**
  * Class BtreeNode
@@ -90,7 +7,7 @@ class Btree {
  * @version 1.0
  * @since 25/11/2020
  */
-class BTreeNode {
+public class BTreeNode {
     int[] keys; // An array of keys
     int t; // Minimum degree (defines the range for number of keys)
     BTreeNode[] C; // An array of child pointers
@@ -209,5 +126,3 @@ class BTreeNode {
         n = n + 1;
     }
 }
-
-

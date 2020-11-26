@@ -24,13 +24,6 @@ public class SocketServer extends Thread {
     private DataOutputStream out;
     private DataInputStream in;
 
-    public static void main(String[] args) throws IOException {
-        SocketServer x;
-        x = new SocketServer();
-
-
-    }
-
     public SocketServer() {
         try {
             socketServer = new ServerSocket(996);
