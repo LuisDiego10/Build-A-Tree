@@ -1,4 +1,11 @@
 package AVL;
+/**
+ *Class AVL TREE
+ * Declare node root and contains all the methods to build the tree
+ * @author Diego
+ * @version 1.0
+ * @since 22/11/2020
+ */
 
 public class AVL {
     AVLNode root;
@@ -9,17 +16,42 @@ public class AVL {
         }
         return node.height;
     }
-    //Calculate the roll factor
+    /**
+     * Method getBalance
+     * Method for calculate the roll factor
+     * @param node
+     * @return roll factor;
+     * @author Diego
+     * @version 1.0
+     * @since 22/11/2020
+     */
     int getBalance(AVLNode node){
         if (node==null){
             return 0;
         }
         return height(node.left)-height(node.right);
     }
-    //Function for calcule max
+    /**
+     * Function for calcule max
+     * @param a and b
+     * @return max;
+     * @author Diego
+     * @version 1.0
+     * @since 22/11/2020
+     */
+
     int max (int a, int b){
         return Math.max(a,b);
     }
+    /**
+     * Method rightRotate
+     * Method for execute right rotation
+     * @param y
+     * @return Tree rotation;
+     * @author Diego
+     * @version 1.0
+     * @since 22/11/2020
+     */
     //Rotation Right
     AVLNode rightRotate(AVLNode y){
         AVLNode x=y.left;
@@ -31,6 +63,15 @@ public class AVL {
         x.height=max(height(x.left),height(x.right))+1;
         return x;
     }
+    /**
+     * Method leftRotate
+     * Method for execute left rotation
+     * @param x
+     * @return Tree rotation;
+     * @author Diego
+     * @version 1.0
+     * @since 22/11/2020
+     */
     //Rotation Left
     AVLNode leftRotate(AVLNode x){
         AVLNode y=x.right;
@@ -41,6 +82,15 @@ public class AVL {
         y.height=max(height(y.left),height(y.right))+1;
         return y;
     }
+    /**
+     * Method insertAVL
+     * Method for execute right rotation
+     * @param node and key
+     * @return The insertion and balance Tree;
+     * @author Diego
+     * @version 1.0
+     * @since 22/11/2020
+     */
     AVLNode insertAVL(AVLNode node, int key){
         if (node==null){
             return new AVLNode(key);
@@ -74,7 +124,13 @@ public class AVL {
         }
         return node;
     }
-
+    /**
+     * Main Class
+     * Contain the instance for run Tree
+     * @author Diego
+     * @version 1.0
+     * @since 22/11/2020
+     */
     public static void main (String args[]) {
         AVL tree = new AVL();
         tree.root = tree.insertAVL(tree.root, 10);
