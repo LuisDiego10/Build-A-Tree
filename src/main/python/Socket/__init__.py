@@ -1,19 +1,20 @@
 import socket
 import threading
 import Factory
+import json
 
 
-class ClientSocket:
+class ClientSocket (threading.Thread):
 
     def __init__(self):
+        super().__init__()
         Host = "localhost"
         PORT: 996
         self.socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket_client.connect((Host, 996))
-        self.thread = threading.Thread(target=self.keep_listen())
         self.msg = ""
 
-    def keep_listen(self):
+    def run(self):
         while True:
             self.msg = self.socket_client.recv(1024)
             self.recieve_msg(self.msg.decode())
@@ -30,4 +31,11 @@ class ClientSocket:
         elif msg == "":
             pass
         else:
-            Factory.Json_To_Token(msg)
+            try:
+                msg = Factory.Json_To_Object(msg)
+            except json.JSONDecodeError:
+                pass
+            finally:
+                pass
+
+        self.msg = msg

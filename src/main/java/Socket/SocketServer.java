@@ -7,9 +7,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 
 public class SocketServer extends Thread {
@@ -17,12 +15,11 @@ public class SocketServer extends Thread {
      * Socket logger
      */
     private static Logger logger = LogManager.getLogger("SocketServer");
-    ;
-    static ObjectMapper mapp = new ObjectMapper();
     public Socket ClientSocket;
     public ServerSocket socketServer;
     private DataOutputStream out;
     private DataInputStream in;
+    private boolean run=true;
 
     public SocketServer() {
         try {
@@ -34,7 +31,6 @@ public class SocketServer extends Thread {
             logger.error("error creating the socket" + e);
         }
         this.start();
-        this.sendMsg("hiClient");
     }
 
     /**
@@ -43,7 +39,7 @@ public class SocketServer extends Thread {
      */
     public void run() {
         DataInputStream input = in;
-        while (true) {
+        while (run) {
             try {
                 int size;
                 System.out.print("reading msg"+"\n");
@@ -60,16 +56,22 @@ public class SocketServer extends Thread {
 
             } catch (IOException e) {
                 logger.error("error recieving msg"+e);
+                finish();
+                System.exit(-2);
             }
         }
 
     }
 
 
+    public void finish(){
+        run=false;
+    }
+
     public void sendMsg(String msg){
         try {
             out.writeUTF(msg);
-            System.out.print(msg+"\n");
+            System.out.print("msg:"+msg+"\n");
         } catch (IOException e) {
             logger.error("error sending msg");
         }

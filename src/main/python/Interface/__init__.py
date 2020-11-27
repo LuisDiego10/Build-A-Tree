@@ -1,13 +1,31 @@
 import pygame
+import Factory
+import Socket
 
 pygame.init()
-
 win = pygame.display.set_mode((1200, 600))
 pygame.display.set_caption("Build-A-Tree")
 
 font = pygame.font.SysFont(None, 80)
 
+# //////Sockets/////// #
+#   global Variables  #
+socket = Socket.ClientSocket()
+socket.start()
+challenge = None
+tokens = []
 
+# Functions for socket#
+def check_msg():
+    global socket, challenge, tokens
+    if socket.msg.__class__ == Factory.Challenge.__class__ and challenge != socket.msg:
+        challenge = socket.msg
+    if socket.msg.__class__ == Factory.Token.__class__ and not(socket.msg in tokens):
+        tokens.append(socket.msg)
+    if socket.msg.__class__ == "".__class__:
+        pass
+
+# ////////////////////#
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
