@@ -142,7 +142,7 @@ class Players(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.x = 100
-        self.y = 100
+        self.y = 550
         self.Jump = False
         self.jumpCount = 10
         self.color=(0,0,0,0)

@@ -16,13 +16,13 @@ import java.io.IOException;
 
 public class Server {
     private static Logger logger = LogManager.getLogger("Server");
-    BST playerOneTree;
-    BST playerTwoTree;
-    BST playerThreeTree;
-    BST playerfourthTree;
+    static BST playerOneTree;
+    static BST playerTwoTree;
+    static BST playerThreeTree;
+    static BST playerfourthTree;
     static Token[] tokens= new Token[5];
     static Challenge actualChallenge;
-    static SocketServer serverSocket ;
+    public static SocketServer serverSocket ;
 
 
     public static void main(String[] args) throws IOException {
@@ -33,6 +33,11 @@ public class Server {
         for (int i = 0; i < 5; i++) {
             tokens[i]= newToken();
             serverSocket.sendMsg(Factory.Serializer(tokens[i]));
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                logger.error("Error waiting for tick"+e);
+            }
         }
         serverSocket.sendMsg(Factory.Serializer(actualChallenge));
         boolean running=true;
@@ -40,11 +45,11 @@ public class Server {
 
             if(actualChallenge.timeleft<0){
                 randomChallenge();
-                System.out.print("\nasd");
+                System.out.print("\n  ");
             }
             try {
                 Thread.sleep(15);
-                System.out.print("\nwaiting");
+                System.out.print("\n waiting");
             } catch (InterruptedException e) {
                 logger.error("Error waiting for tick"+e);
             }
@@ -55,9 +60,7 @@ public class Server {
                     tokens[i]= newToken();
                     serverSocket.sendMsg(Factory.Serializer(tokens[i]));
                 }
-
             }
-
         }
     }
 
@@ -88,7 +91,7 @@ public class Server {
         newToken.value=randomizer.nextInt(40);
         return newToken;
     }
-    public void playToken(Token token){
+    public static void playToken(Token token){
         switch (token.player){
             case 1:
                 playerOneTree=checkTree(playerOneTree,token);
@@ -103,11 +106,8 @@ public class Server {
                 playerfourthTree=checkTree(playerfourthTree,token);
                 break;
         }
-
-
-
     }
-    public BST checkTree(BST playerTree, Token token){
+    public static BST checkTree(BST playerTree, Token token){
         if (playerTree != null){
             if (playerTree.getClass().getName().equals(token.type)) {
                 if(playerTree.getClass()==BST.class){
@@ -123,12 +123,13 @@ public class Server {
             }else{
                 playerTree=null;
             }
+            deleteToken(token);
         }
         return playerTree;
     }
-    public void deleteToken(int value, String kind){
+    public static void deleteToken(Token token){
         for (int a=0;a<5;a++) {
-            if(tokens[a].value==value & tokens[a].type.equals(kind)){
+            if(tokens[a].value==token.value & tokens[a].type==token.type){
                 tokens[a]=newToken();
         }
 

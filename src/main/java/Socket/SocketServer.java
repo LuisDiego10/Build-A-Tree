@@ -1,4 +1,7 @@
 package Socket;
+import Challenge.Token;
+import Server.Server;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +23,8 @@ public class SocketServer extends Thread {
     private DataOutputStream out;
     private DataInputStream in;
     private boolean run=true;
+    static ObjectMapper mapp = new ObjectMapper();
+
 
     public SocketServer() {
         try {
@@ -52,17 +57,32 @@ public class SocketServer extends Thread {
                     i++;
                 }
                 String msga= new String(msg, StandardCharsets.UTF_8);
+                Token token = null;
                 System.out.print(msga+"\n");
+                try {
+                    token = mapp.readValue(msga, Token.class);
+                } catch (JsonProcessingException e) {
+                    logger.error("error creating the token from server"+e);
+                }
+                Server.playToken(token);
+
 
             } catch (IOException e) {
                 logger.error("error recieving msg"+e);
-                finish();
-                System.exit(-2);
+                try {
+                    this.socketServer.close();
+                } catch (IOException ex) {
+                    logger.error("error closing socket"+e);
+
+                }
+                Server.serverSocket= new SocketServer();
+                this.run=false;
+//                finish();
+//                System.exit(-2);
             }
         }
 
     }
-
 
     public void finish(){
         run=false;

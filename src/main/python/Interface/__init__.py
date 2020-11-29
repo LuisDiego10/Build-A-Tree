@@ -16,14 +16,15 @@ challenge = None
 tokens = []
 
 # Functions for socket#
-def check_msg():
+def check_msg(msg):
     global socket, challenge, tokens
-    if socket.msg.__class__ == Factory.Challenge.__class__ and challenge != socket.msg:
-        challenge = socket.msg
-    if socket.msg.__class__ == Factory.Token.__class__ and not(socket.msg in tokens):
-        tokens.append(socket.msg)
-    if socket.msg.__class__ == "".__class__:
+    if msg.__class__ == Factory.Challenge.__class__ and challenge != msg:
+        challenge = msg
+    if msg.__class__ == Factory.Token.__class__ and not(msg in tokens):
+        tokens.append(msg)
+    if msg.__class__ == "".__class__:
         pass
+    print(challenge, tokens)
 
 # ////////////////////#
 def draw_text(text, font, color, surface, x, y):
@@ -142,7 +143,7 @@ class Players(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.x = 100
-        self.y = 100
+        self.y = 550
         self.Jump = False
         self.jumpCount = 10
         self.color=(0,0,0,0)
