@@ -1,11 +1,11 @@
 import pygame
 import Factory
 import Socket
-
+background= pygame.image.load("Wiki/background.jpg").convert()
 pygame.init()
 win = pygame.display.set_mode((1200, 600))
 pygame.display.set_caption("Build-A-Tree")
-
+win.blit(background,[100,100])
 font = pygame.font.SysFont(None, 80)
 
 # //////Sockets/////// #
