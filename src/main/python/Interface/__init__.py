@@ -28,7 +28,6 @@ def check_msg():
     # print(challenge, tokens[0].tree_type)
 
 
-
 # ////////////////////#
 
 def draw_text(text, font, color, surface, x, y):
@@ -71,7 +70,7 @@ def main_menu():
 
 def game():
     check_msg()
-    socket.send_msg(tokens[0].__dict__)
+    # socket.send_msg(tokens[0].__dict__)
     player1 = Players()
     player2 = Players()
 
@@ -80,13 +79,14 @@ def game():
     plataform3 = Plataform()
     plataform_princ = Plataform()
 
+    falling_velocity = 3
 
     running = True
     while running:
-        socket.send_msg(tokens[0].__dict__)
-        tokens.pop(0)
-        check_msg()
-        print(len(tokens))
+        # socket.send_msg(tokens[0].__dict__)
+        # tokens.pop(0)
+        # check_msg()
+        # print(len(tokens))
         pygame.time.delay(100)
         win.fill((0, 0, 0))
         win.blit(background, [-1000, 0])
@@ -101,7 +101,32 @@ def game():
 
         keys = pygame.key.get_pressed()
 
-        # Player 1 Keys
+        # Collitions
+        if player1.y <= plataform1.yp + player1.height and player1.y + falling_velocity >= plataform1.yp - player1.height:
+            player1.y = plataform1.yp - player1.height
+
+        else:
+            player1.y += falling_velocity
+
+        if player1.y <= plataform2.yp + player1.height and player1.y + falling_velocity >= plataform2.yp - player1.height:
+            player1.y = plataform2.yp - player1.height
+
+        else:
+            player1.y += falling_velocity
+
+        if player1.y <= plataform3.yp + player1.height and player1.y + falling_velocity >= plataform3.yp - player1.height:
+            player1.y = plataform3.yp - player1.height
+
+        else:
+            player1.y += falling_velocity
+
+        if player1.y <= plataform_princ.yp + player1.height and player1.y + falling_velocity >= plataform_princ.yp - player1.height:
+            player1.y = plataform_princ.yp - player1.height
+
+        else:
+            player1.y += falling_velocity
+
+            # Player 1 Keys
         if keys[pygame.K_LEFT] and player1.x > 10:
             player1.x -= 15
 
@@ -112,8 +137,6 @@ def game():
             if keys[pygame.K_UP] and player1.y > 100:
                 player1.Jump = True
 
-            if keys[pygame.K_DOWN] and player1.y < 500:
-                player1.y += 5
         else:
             if player1.jumpCount >= -30:
                 neg = 1
@@ -181,7 +204,7 @@ class Players(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.x = 220
-        self.y = 390
+        self.y = 320
         self.Jump = False
         self.jumpCount = 10
         self.color = (0, 0, 0)
@@ -202,13 +225,13 @@ class Plataform(pygame.sprite.Sprite):
         self.height = 20
 
     def draw_plataform(self):
-
         pygame.draw.rect(win, self.color, (self.xp, self.yp, self.width, self.height))
 
 
 class Tokens(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.color=(0,0,0,0)
+        self.color = (0, 0, 0, 0)
+
 
 main_menu()
