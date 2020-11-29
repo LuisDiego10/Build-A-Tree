@@ -3,9 +3,9 @@ package Challenge;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Token {
-    @JsonProperty("type")
+    @JsonProperty("tree_type")
     public String type;
-    @JsonProperty("value")
+    @JsonProperty("int_value")
     public int value;
     @JsonProperty("player")
     public int player;

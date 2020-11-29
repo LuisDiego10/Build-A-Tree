@@ -14,7 +14,7 @@ public class Btree extends BST {
     public int t;
 
 
-    Btree(int t) {
+    public Btree(int t) {
         this.root = null;
         this.t = t;
     }
