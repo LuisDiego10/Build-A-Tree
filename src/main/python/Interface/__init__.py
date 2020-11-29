@@ -70,6 +70,7 @@ def main_menu():
 def game():
     player1 = Players()
     player2 = Players()
+    plataform1 = Plataform()
     running = True
     while running:
         pygame.time.delay(100)
@@ -138,8 +139,13 @@ def game():
 
         player1.color = 255, 0, 0
         player2.color = 0, 0, 255
+
         player1.draw_player()
         player2.draw_player()
+
+        plataform1.color = 255, 0, 0
+        plataform1.draw_plataform()
+
 
         pygame.display.update()
 
@@ -158,5 +164,16 @@ class Players(pygame.sprite.Sprite):
     def draw_player(self):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
 
+class Plataform(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.xp = 200
+        self.yp = 400
+        self.color = (0, 0, 0, 0)
+        self.width = 100
+        self.height = 20
+
+    def draw_plataform(self):
+        pygame.draw.rect(win, self.color, (self.xp, self.yp, self.width, self.height))
 
 main_menu()
