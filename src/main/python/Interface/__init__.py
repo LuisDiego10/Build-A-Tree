@@ -167,13 +167,15 @@ class Players(pygame.sprite.Sprite):
 class Plataform(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.xp = 200
-        self.yp = 400
         self.color = (0, 0, 0, 0)
-        self.width = 100
+        self.width = 150
         self.height = 20
 
     def draw_plataform(self):
-        pygame.draw.rect(win, self.color, (self.xp, self.yp, self.width, self.height))
+        pygame.draw.rect(win, self.color, (75, 300, self.width, self.height))
+        pygame.draw.rect(win, self.color, (700, 300, self.width, self.height))
+        pygame.draw.rect(win, self.color, (375, 200, 200, self.height))
+        pygame.draw.rect(win, self.color, (210, 450, 500, self.height))
+
 
 main_menu()
