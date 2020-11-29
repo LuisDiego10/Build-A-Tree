@@ -70,7 +70,12 @@ def main_menu():
 def game():
     player1 = Players()
     player2 = Players()
+
     plataform1 = Plataform()
+    plataform2 = Plataform()
+    plataform3 = Plataform()
+    plataform_princ = Plataform()
+
     running = True
     while running:
         pygame.time.delay(100)
@@ -143,9 +148,23 @@ def game():
         player1.draw_player()
         player2.draw_player()
 
-        plataform1.color = 255, 0, 0
+        plataform1.xp = 75
+        plataform1.yp = 300
         plataform1.draw_plataform()
 
+        plataform2.xp = 700
+        plataform2.yp = 300
+        plataform2.draw_plataform()
+
+        plataform3.xp = 375
+        plataform3.yp = 200
+        plataform3.width = 200
+        plataform3.draw_plataform()
+
+        plataform_princ.xp = 210
+        plataform_princ.yp = 450
+        plataform_princ.width = 500
+        plataform_princ.draw_plataform()
 
         pygame.display.update()
 
@@ -157,7 +176,7 @@ class Players(pygame.sprite.Sprite):
         self.y = 390
         self.Jump = False
         self.jumpCount = 10
-        self.color = (0, 0, 0, 0)
+        self.color = (0, 0, 0)
         self.width = 40
         self.height = 60
 
@@ -167,15 +186,15 @@ class Players(pygame.sprite.Sprite):
 class Plataform(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.color = (0, 0, 0, 0)
+        self.xp = 0
+        self.yp = 0
+        self.color = (255, 0, 0)
         self.width = 150
         self.height = 20
 
     def draw_plataform(self):
-        pygame.draw.rect(win, self.color, (75, 300, self.width, self.height))
-        pygame.draw.rect(win, self.color, (700, 300, self.width, self.height))
-        pygame.draw.rect(win, self.color, (375, 200, 200, self.height))
-        pygame.draw.rect(win, self.color, (210, 450, 500, self.height))
+        pygame.draw.rect(win, self.color, (self.xp, self.yp, self.width, self.height))
+
 
 
 main_menu()
