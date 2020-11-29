@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
  * Class that serialize to Json.
  * @author Isaac
  * @version 1.0
- * @since 29/10/2020
+ * @since 25/11/2020
  */
 public class Factory {
     static Logger logger=LogManager.getLogger("Abstract Factory");
