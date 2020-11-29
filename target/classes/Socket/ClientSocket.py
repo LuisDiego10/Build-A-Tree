@@ -1,7 +1,6 @@
 import socket
 import threading
 
-
 class ClientSocket:
 
     def __init__(self):
@@ -23,7 +22,3 @@ class ClientSocket:
         msg = msg.encode(encoding='UTF-8', errors='strict')
         print(msg)
         self.socket_client.sendall(msg)
-
-
-Client = ClientSocket()
-Client.send_msg("Bye\n")
