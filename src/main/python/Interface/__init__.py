@@ -176,6 +176,8 @@ class Plataform(pygame.sprite.Sprite):
         pygame.draw.rect(win, self.color, (700, 300, self.width, self.height))
         pygame.draw.rect(win, self.color, (375, 200, 200, self.height))
         pygame.draw.rect(win, self.color, (210, 450, 500, self.height))
-
-
+class Tokens(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.color=(0,0,0,0)
 main_menu()
