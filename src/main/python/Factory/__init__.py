@@ -12,7 +12,6 @@ class Token:
         self.int_value = None
         self.tree_type = None
 
-
 def challenge():
     return Challenge()
 
