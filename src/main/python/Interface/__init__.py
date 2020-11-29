@@ -15,7 +15,7 @@ socket.start()
 challenge = None
 tokens = []
 
-
+tokens_arr=[]#Almacenar tokens de la clase de aquí cuando ya esté dibujados
 # Functions for socket#
 def check_msg():
     global socket, challenge, tokens
@@ -174,6 +174,7 @@ def game():
         plataform_princ.width = 500
         plataform_princ.draw_plataform()
 
+
         pygame.display.update()
 
 
@@ -209,6 +210,9 @@ class Plataform(pygame.sprite.Sprite):
 class Tokens(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.color=(0,0,0,0)
+        self.shape=""
+        self.x=0
+        self.y=0
+
 
 main_menu()
