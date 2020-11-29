@@ -7,6 +7,7 @@ import Challenge.Challenge;
 import Challenge.Token;
 import SPLAY.SPLAYTree;
 import Socket.SocketServer;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +35,7 @@ public class Server {
             tokens[i]= newToken();
             serverSocket.sendMsg(Factory.Serializer(tokens[i]));
             try {
-                Thread.sleep(20);
+                Thread.sleep(25);
             } catch (InterruptedException e) {
                 logger.error("Error waiting for tick"+e);
             }
@@ -49,7 +50,6 @@ public class Server {
             }
             try {
                 Thread.sleep(15);
-                System.out.print("\n waiting");
             } catch (InterruptedException e) {
                 logger.error("Error waiting for tick"+e);
             }
@@ -123,15 +123,33 @@ public class Server {
             }else{
                 playerTree=null;
             }
-            deleteToken(token);
+        }else{
+            if(token.type.equals(BST.class.getName())){
+                playerTree=new BST();
+                playerTree.insert(token.value);
+            }else if(token.type.equals(Btree.class.getName())){
+                playerTree=new Btree(token.value);
+            }else if(token.type.equals(AVL.class.getName())){
+                playerTree=new AVL();
+                playerTree.insertAVL(token.value);
+            }else{
+                playerTree=new SPLAYTree(token.value);
+            }
         }
+        deleteToken(token);
+
         return playerTree;
     }
     public static void deleteToken(Token token){
         for (int a=0;a<5;a++) {
-            if(tokens[a].value==token.value & tokens[a].type==token.type){
+            if(tokens[a].value==token.value & tokens[a].type.equals(token.type)){
                 tokens[a]=newToken();
-        }
+                try {
+                    serverSocket.sendMsg(Factory.Serializer(tokens[a]));
+                } catch (JsonProcessingException e) {
+                    logger.error("error serilizing a new token"+e);
+                }
+            }
 
 
         }

@@ -17,18 +17,20 @@ tokens = []
 
 
 # Functions for socket#
-def check_msg(msg):
+def check_msg():
     global socket, challenge, tokens
-    if msg.__class__ == Factory.Challenge.__class__ and challenge != msg:
-        challenge = msg
-    if msg.__class__ == Factory.Token.__class__ and not (msg in tokens):
-        tokens.append(msg)
-    if msg.__class__ == "".__class__:
+    if socket.tokens != tokens:
+        tokens = socket.tokens
+    if socket.challenge != challenge:
+        challenge = socket.challenge
+    else:
         pass
-    print(challenge, tokens)
+    # print(challenge, tokens[0].tree_type)
+
 
 
 # ////////////////////#
+
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
@@ -68,6 +70,8 @@ def main_menu():
 
 
 def game():
+    check_msg()
+    socket.send_msg(tokens[0].__dict__)
     player1 = Players()
     player2 = Players()
 
@@ -76,8 +80,13 @@ def game():
     plataform3 = Plataform()
     plataform_princ = Plataform()
 
+
     running = True
     while running:
+        socket.send_msg(tokens[0].__dict__)
+        tokens.pop(0)
+        check_msg()
+        print(len(tokens))
         pygame.time.delay(100)
         win.fill((0, 0, 0))
         win.blit(background, [-1000, 0])
@@ -144,7 +153,6 @@ def game():
 
         player1.color = 255, 0, 0
         player2.color = 0, 0, 255
-
         player1.draw_player()
         player2.draw_player()
 
@@ -183,6 +191,7 @@ class Players(pygame.sprite.Sprite):
     def draw_player(self):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
 
+
 class Plataform(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -193,8 +202,13 @@ class Plataform(pygame.sprite.Sprite):
         self.height = 20
 
     def draw_plataform(self):
+
         pygame.draw.rect(win, self.color, (self.xp, self.yp, self.width, self.height))
 
 
+class Tokens(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.color=(0,0,0,0)
 
 main_menu()
