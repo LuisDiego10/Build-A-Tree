@@ -2,10 +2,10 @@ import pygame
 import Factory
 import Socket
 
+background = pygame.image.load("backgound.jpg")
 pygame.init()
 win = pygame.display.set_mode((1200, 600))
 pygame.display.set_caption("Build-A-Tree")
-
 font = pygame.font.SysFont(None, 80)
 
 # //////Sockets/////// #
@@ -15,15 +15,18 @@ socket.start()
 challenge = None
 tokens = []
 
+
 # Functions for socket#
-def check_msg():
+def check_msg(msg):
     global socket, challenge, tokens
-    if socket.msg.__class__ == Factory.Challenge.__class__ and challenge != socket.msg:
-        challenge = socket.msg
-    if socket.msg.__class__ == Factory.Token.__class__ and not(socket.msg in tokens):
-        tokens.append(socket.msg)
-    if socket.msg.__class__ == "".__class__:
+    if msg.__class__ == Factory.Challenge.__class__ and challenge != msg:
+        challenge = msg
+    if msg.__class__ == Factory.Token.__class__ and not (msg in tokens):
+        tokens.append(msg)
+    if msg.__class__ == "".__class__:
         pass
+    print(challenge, tokens)
+
 
 # ////////////////////#
 def draw_text(text, font, color, surface, x, y):
@@ -65,12 +68,14 @@ def main_menu():
 
 
 def game():
-    player1=Players()
-    player2=Players()
+    player1 = Players()
+    player2 = Players()
+    plataform1 = Plataform()
     running = True
     while running:
         pygame.time.delay(100)
         win.fill((0, 0, 0))
+        win.blit(background, [-1000, 0])
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -96,7 +101,7 @@ def game():
             if keys[pygame.K_DOWN] and player1.y < 500:
                 player1.y += 5
         else:
-            if player1.jumpCount >= -10:
+            if player1.jumpCount >= -30:
                 neg = 1
                 if player1.jumpCount < 0:
                     neg = -1
@@ -121,7 +126,7 @@ def game():
             if keys[pygame.K_s] and player2.y < 500:
                 player2.y += 5
         else:
-            if player2.jumpCount >= -10:
+            if player2.jumpCount >= -30:
                 neg = 1
                 if player2.jumpCount < 0:
                     neg = -1
@@ -132,12 +137,19 @@ def game():
                 player2.Jump = False
                 player2.jumpCount = 10
 
-        player1.color=255,0,0
-        player2.color=0,0,255
+        player1.color = 255, 0, 0
+        player2.color = 0, 0, 255
+
         player1.draw_player()
         player2.draw_player()
 
+        plataform1.color = 255, 0, 0
+        plataform1.draw_plataform()
+
+
         pygame.display.update()
+
+
 class Players(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -145,11 +157,23 @@ class Players(pygame.sprite.Sprite):
         self.y = 550
         self.Jump = False
         self.jumpCount = 10
-        self.color=(0,0,0,0)
-        self.width=40
-        self.height=60
+        self.color = (0, 0, 0, 0)
+        self.width = 40
+        self.height = 60
 
     def draw_player(self):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
+
+class Plataform(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.xp = 200
+        self.yp = 400
+        self.color = (0, 0, 0, 0)
+        self.width = 100
+        self.height = 20
+
+    def draw_plataform(self):
+        pygame.draw.rect(win, self.color, (self.xp, self.yp, self.width, self.height))
 
 main_menu()

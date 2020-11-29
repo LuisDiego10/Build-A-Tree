@@ -2,10 +2,10 @@ import pygame
 import Factory
 import Socket
 
+background = pygame.image.load("backgound.jpg")
 pygame.init()
 win = pygame.display.set_mode((1200, 600))
 pygame.display.set_caption("Build-A-Tree")
-
 font = pygame.font.SysFont(None, 80)
 
 # //////Sockets/////// #
@@ -26,6 +26,7 @@ def check_msg():
     else:
         pass
     # print(challenge, tokens[0].tree_type)
+
 
 
 # ////////////////////#
@@ -73,6 +74,8 @@ def game():
     socket.send_msg(tokens[0].__dict__)
     player1 = Players()
     player2 = Players()
+    plataform1 = Plataform()
+
     running = True
     while running:
         socket.send_msg(tokens[0].__dict__)
@@ -81,6 +84,7 @@ def game():
         print(len(tokens))
         pygame.time.delay(100)
         win.fill((0, 0, 0))
+        win.blit(background, [-1000, 0])
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -106,7 +110,7 @@ def game():
             if keys[pygame.K_DOWN] and player1.y < 500:
                 player1.y += 5
         else:
-            if player1.jumpCount >= -10:
+            if player1.jumpCount >= -30:
                 neg = 1
                 if player1.jumpCount < 0:
                     neg = -1
@@ -131,7 +135,7 @@ def game():
             if keys[pygame.K_s] and player2.y < 500:
                 player2.y += 5
         else:
-            if player2.jumpCount >= -10:
+            if player2.jumpCount >= -30:
                 neg = 1
                 if player2.jumpCount < 0:
                     neg = -1
@@ -147,14 +151,18 @@ def game():
         player1.draw_player()
         player2.draw_player()
 
+        plataform1.color = 255, 0, 0
+        plataform1.draw_plataform()
+
+
         pygame.display.update()
 
 
 class Players(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.x = 100
-        self.y = 550
+        self.x = 220
+        self.y = 390
         self.Jump = False
         self.jumpCount = 10
         self.color = (0, 0, 0, 0)
@@ -165,4 +173,20 @@ class Players(pygame.sprite.Sprite):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
 
 
+class Plataform(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.color = (0, 0, 0, 0)
+        self.width = 150
+        self.height = 20
+
+    def draw_plataform(self):
+        pygame.draw.rect(win, self.color, (75, 300, self.width, self.height))
+        pygame.draw.rect(win, self.color, (700, 300, self.width, self.height))
+        pygame.draw.rect(win, self.color, (375, 200, 200, self.height))
+        pygame.draw.rect(win, self.color, (210, 450, 500, self.height))
+class Tokens(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.color=(0,0,0,0)
 main_menu()
