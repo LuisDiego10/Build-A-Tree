@@ -1,6 +1,50 @@
 import pygame
+import random
+
 import Factory
 import Socket
+"""Class Players
+Contains all attributes and methods to Players
+This class extends pygame Sprite class
+"""
+class Players(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.x = 220
+        self.y = 320
+        self.Jump = False
+        self.jumpCount = 10
+        self.color = (0, 0, 0)
+        self.width = 40
+        self.height = 60
+
+    def draw_player(self):
+        pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
+
+"""Class Plataform
+Contains all attributes and methods to Plataform
+This class extends pygame Sprite class
+"""
+class Plataform(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.xp = 0
+        self.yp = 0
+        self.color = (255, 0, 0)
+        self.width = 150
+        self.height = 20
+
+    def draw_plataform(self):
+        pygame.draw.rect(win, self.color, (self.xp, self.yp, self.width, self.height))
+"""Class Tokens
+Contains all attributes and methods to Tokens
+This class extends pygame Sprite class
+"""
+class Tokens (pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image=pygame.image.load("triangulo.png")
+        self.rect=self.image.get_rect()#Obtenemos las coordenadas del Sprite
 
 background = pygame.image.load("backgound.jpg")
 pygame.init()
@@ -14,8 +58,6 @@ socket = Socket.ClientSocket()
 socket.start()
 challenge = None
 tokens = []
-
-tokens_arr=[]#Almacenar tokens de la clase de aquí cuando ya esté dibujados
 # Functions for socket#
 def check_msg():
     global socket, challenge, tokens
@@ -35,7 +77,19 @@ def draw_text(text, font, color, surface, x, y):
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
+    "Show Tokens"
+tokens_arr=pygame.sprite.Group() #Almacenar tokens de la clase de aquí cuando ya esté dibujados
+allspriteslist=pygame.sprite.Group()
 
+for i in range(2):
+    triangule=Tokens()
+    triangule.rect.x=random.randrange(840)
+    triangule.rect.y=random.randrange(600)
+    tokens_arr.add(triangule)
+    allspriteslist.add(triangule)
+    allspriteslist.draw(win)
+    break
+allspriteslist.draw(win)
 
 def main_menu():
     while True:
@@ -67,7 +121,7 @@ def main_menu():
 
         pygame.display.update()
 
-
+"""This function is responsible for running the game"""
 def game():
     check_msg()
     # socket.send_msg(tokens[0].__dict__)
@@ -98,10 +152,8 @@ def game():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-
         keys = pygame.key.get_pressed()
-
-        # Collitions
+            # Collitions
         if player1.y <= plataform1.yp + player1.height and player1.y + falling_velocity >= plataform1.yp - player1.height:
             player1.y = plataform1.yp - player1.height
 
@@ -173,7 +225,7 @@ def game():
             else:
                 player2.Jump = False
                 player2.jumpCount = 10
-
+        "Instances"
         player1.color = 255, 0, 0
         player2.color = 0, 0, 255
         player1.draw_player()
@@ -196,44 +248,7 @@ def game():
         plataform_princ.yp = 450
         plataform_princ.width = 500
         plataform_princ.draw_plataform()
-
-
         pygame.display.update()
-
-
-class Players(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.x = 220
-        self.y = 320
-        self.Jump = False
-        self.jumpCount = 10
-        self.color = (0, 0, 0)
-        self.width = 40
-        self.height = 60
-
-    def draw_player(self):
-        pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
-
-
-class Plataform(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.xp = 0
-        self.yp = 0
-        self.color = (255, 0, 0)
-        self.width = 150
-        self.height = 20
-
-    def draw_plataform(self):
-        pygame.draw.rect(win, self.color, (self.xp, self.yp, self.width, self.height))
-
-class Tokens (pygame.sprite.Sprite):
-    def __init__(self):
-        super.__init__(self):
-        self.image=pygame.image.load("")
-        self.image.set_colorkey(255,255,255)
-        self.rect=self.image.get_rect()#Obtenemos las coordenadas del Sprite
 
 
 main_menu()
