@@ -15,20 +15,21 @@ socket.start()
 challenge = None
 tokens = []
 
-
+tokens_arr=[]#Almacenar tokens de la clase de aquí cuando ya esté dibujados
 # Functions for socket#
-def check_msg(msg):
+def check_msg():
     global socket, challenge, tokens
-    if msg.__class__ == Factory.Challenge.__class__ and challenge != msg:
-        challenge = msg
-    if msg.__class__ == Factory.Token.__class__ and not (msg in tokens):
-        tokens.append(msg)
-    if msg.__class__ == "".__class__:
+    if socket.tokens != tokens:
+        tokens = socket.tokens
+    if socket.challenge != challenge:
+        challenge = socket.challenge
+    else:
         pass
-    print(challenge, tokens)
+    # print(challenge, tokens[0].tree_type)
 
 
 # ////////////////////#
+
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
@@ -68,11 +69,24 @@ def main_menu():
 
 
 def game():
+    check_msg()
+    # socket.send_msg(tokens[0].__dict__)
     player1 = Players()
     player2 = Players()
+
     plataform1 = Plataform()
+    plataform2 = Plataform()
+    plataform3 = Plataform()
+    plataform_princ = Plataform()
+
+    falling_velocity = 3
+
     running = True
     while running:
+        # socket.send_msg(tokens[0].__dict__)
+        # tokens.pop(0)
+        # check_msg()
+        # print(len(tokens))
         pygame.time.delay(100)
         win.fill((0, 0, 0))
         win.blit(background, [-1000, 0])
@@ -87,7 +101,32 @@ def game():
 
         keys = pygame.key.get_pressed()
 
-        # Player 1 Keys
+        # Collitions
+        if player1.y <= plataform1.yp + player1.height and player1.y + falling_velocity >= plataform1.yp - player1.height:
+            player1.y = plataform1.yp - player1.height
+
+        else:
+            player1.y += falling_velocity
+
+        if player1.y <= plataform2.yp + player1.height and player1.y + falling_velocity >= plataform2.yp - player1.height:
+            player1.y = plataform2.yp - player1.height
+
+        else:
+            player1.y += falling_velocity
+
+        if player1.y <= plataform3.yp + player1.height and player1.y + falling_velocity >= plataform3.yp - player1.height:
+            player1.y = plataform3.yp - player1.height
+
+        else:
+            player1.y += falling_velocity
+
+        if player1.y <= plataform_princ.yp + player1.height and player1.y + falling_velocity >= plataform_princ.yp - player1.height:
+            player1.y = plataform_princ.yp - player1.height
+
+        else:
+            player1.y += falling_velocity
+
+            # Player 1 Keys
         if keys[pygame.K_LEFT] and player1.x > 10:
             player1.x -= 15
 
@@ -98,8 +137,6 @@ def game():
             if keys[pygame.K_UP] and player1.y > 100:
                 player1.Jump = True
 
-            if keys[pygame.K_DOWN] and player1.y < 500:
-                player1.y += 5
         else:
             if player1.jumpCount >= -30:
                 neg = 1
@@ -139,12 +176,26 @@ def game():
 
         player1.color = 255, 0, 0
         player2.color = 0, 0, 255
-
         player1.draw_player()
         player2.draw_player()
 
-        plataform1.color = 255, 0, 0
+        plataform1.xp = 75
+        plataform1.yp = 300
         plataform1.draw_plataform()
+
+        plataform2.xp = 700
+        plataform2.yp = 300
+        plataform2.draw_plataform()
+
+        plataform3.xp = 375
+        plataform3.yp = 200
+        plataform3.width = 200
+        plataform3.draw_plataform()
+
+        plataform_princ.xp = 210
+        plataform_princ.yp = 450
+        plataform_princ.width = 500
+        plataform_princ.draw_plataform()
 
 
         pygame.display.update()
@@ -153,27 +204,40 @@ def game():
 class Players(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.x = 100
-        self.y = 550
+        self.x = 220
+        self.y = 320
         self.Jump = False
         self.jumpCount = 10
-        self.color = (0, 0, 0, 0)
+        self.color = (0, 0, 0)
         self.width = 40
         self.height = 60
 
     def draw_player(self):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
 
+
 class Plataform(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.xp = 200
-        self.yp = 400
-        self.color = (0, 0, 0, 0)
-        self.width = 100
+        self.xp = 0
+        self.yp = 0
+        self.color = (255, 0, 0)
+        self.width = 150
         self.height = 20
 
     def draw_plataform(self):
         pygame.draw.rect(win, self.color, (self.xp, self.yp, self.width, self.height))
+
+
+class Tokens(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.color = (0, 0, 0, 0)
+
+        self.shape=""
+        self.x=0
+        self.y=0
+
+
 
 main_menu()
