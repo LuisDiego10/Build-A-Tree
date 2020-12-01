@@ -15,8 +15,12 @@ class Tokens (pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
+        self.Jump = False
+        self.jumpCount = 10
         self.image=pygame.image.load("Player1.png")
         self.rect=self.image.get_rect()
+        self.rect.x=240
+        self.rect.y=360
 
 
 background = pygame.image.load("backgound.jpg")
@@ -38,7 +42,10 @@ for i in range(10):
     all_sprite_list.add(triangule)
 
 player1 = Player()
+player2=Player()
+player2.image=pygame.image.load("Player2.png")
 all_sprite_list.add(player1)
+all_sprite_list.add(player2)
 
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
@@ -88,14 +95,56 @@ def game():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
-            keys = pygame.key.get_pressed()
-            pygame.display.update()
-            all_sprite_list.update()
-            mouse_pos = pygame.mouse.get_pos()
-            player1.rect.x = mouse_pos[0]
-            player1.rect.y = mouse_pos[1]
-            tokens_hit_list=pygame.sprite.spritecollide(player1,tokens_list,True)
-            all_sprite_list.draw(win)
-            pygame.display.flip()
+        keys = pygame.key.get_pressed()
+        # Collitions
+        # Player 1 Keys
+        if keys[pygame.K_LEFT] and player1.rect.x > 10:
+            player1.rect.x -= 15
+
+        if keys[pygame.K_RIGHT] and player1.rect.x < 800:
+            player1.rect.x += 15
+
+        if keys[pygame.K_UP] and player1.rect.y > 100:
+            if player1.jumpCount >= 0:
+                neg = 1
+                if player1.jumpCount < 0:
+                    neg = -1
+                player1.rect.y -= (player1.jumpCount * 4)-(player1.jumpCount**0.5//1)
+                player1.jumpCount -= 1
+
+            else:
+                player1.Jump = False
+                player1.jumpCount = 10
+
+        # Player 2 Keys
+        if keys[pygame.K_a] and player2.rect.x > 10:
+            player2.rect.x -= 15
+
+        if keys[pygame.K_d] and player2.rect.x < 850:
+            player2.rect.x += 15
+
+        if not player2.Jump:
+            if keys[pygame.K_w] and player2.rect.y > 100:
+                player2.Jump = True
+
+            if keys[pygame.K_s] and player2.rect.y < 500:
+                player2.rect.y += 5
+        else:
+            if player2.jumpCount >= -30:
+                neg = 1
+                if player2.jumpCount < 0:
+                    neg = -1
+                player2.rect.y -= (player2.jumpCount ** 2) * 0.5 * neg
+                player2.jumpCount -= 1
+
+            else:
+                player2.Jump = False
+                player2.jumpCount = 10
+        tokens_list.update()
+        tokens_hit_list=pygame.sprite.spritecollide(player1,tokens_list,True)
+        tokens_hit_list=pygame.sprite.spritecollide(player2,tokens_list,True)
+        all_sprite_list.draw(win)
+        pygame.display.flip()
+        pygame.display.update()
 
 main_menu()
