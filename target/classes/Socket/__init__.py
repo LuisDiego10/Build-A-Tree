@@ -1,7 +1,8 @@
 import socket
 import threading
-import Factory
+from Factory import *
 import json
+from Interface import *
 
 
 class ClientSocket(threading.Thread):
@@ -12,8 +13,6 @@ class ClientSocket(threading.Thread):
         PORT: 996
         self.socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket_client.connect((Host, 996))
-        self.tokens = []
-        self.challenge=None
 
     def run(self):
         while True:
@@ -24,7 +23,6 @@ class ClientSocket(threading.Thread):
             self.recieve_msg(msg)
 
     def send_msg(self, msg):
-        msg=json.dumps(msg)
         self.socket_client.send(len(msg).to_bytes((msg.__sizeof__().bit_length() + 7) // 8, 'big'))
         msg = msg.encode(encoding='UTF-8', errors='strict')
         self.socket_client.sendall(msg)
@@ -36,23 +34,18 @@ class ClientSocket(threading.Thread):
             pass
         else:
             try:
-                msg = msg[1:]
-                print(msg[1:])
-                sub_object = json.loads(msg[1:])
+                print(msg)
+                msg= msg[1:]
+                sub_object = json.loads(msg)
                 print(sub_object)
                 if "reward" in msg:
-                    object = Factory.challenge()
-                    object.deep = sub_object["deep"]
-                    object.treeType = sub_object["treeType"]
-                    object.order = sub_object["order"]
-                    self.challenge=object
+                    sub_object = Challenge(sub_object["treeType"], sub_object["deep"], sub_object["order"])
+                    Interface.check_msg(sub_object)
                     print("a4")
 
                 else:
-                    object = Factory.token()
-                    object.int_value = sub_object["int_value"]
-                    object.tree_type = sub_object["tree_type"]
-                    self.tokens.append(object)
+                    sub_object = Token(sub_object["value"], sub_object["type"])
+                    Interface.check_msg(sub_object)
                     print("a4")
             except json.JSONDecodeError:
                 print("error")

@@ -1,20 +1,17 @@
-class Challenge:
-    def __init__(self):
-        self.treeType = None
-        self.deep = None
-        self.order = None
-        self.timeleft = None
-        self.reward = None
+import json
+import Interface
+
 
 class Token:
-    def __init__(self):
+    def __init__(self, value, type):
         self.player = None
-        self.int_value = None
-        self.tree_type = None
+        self.int_value = value
+        self.tree_type = type
 
-def challenge():
-    return Challenge()
-
-def token():
-    return Token()
-
+class Challenge:
+    def __init__(self, tree, deeper, grade):
+        self.treeType = tree
+        self.deep = deeper
+        self.order = grade
+        self.timeleft = 2000
+        self.reward = 5000
