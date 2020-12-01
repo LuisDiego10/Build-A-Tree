@@ -67,7 +67,7 @@ def main_menu():
 
         pygame.display.update()
 
-
+"""This function is responsible for running the game"""
 def game():
     check_msg()
     # socket.send_msg(tokens[0].__dict__)
@@ -200,7 +200,10 @@ def game():
 
         pygame.display.update()
 
-
+"""Class Players
+Contains all attributes and methods to Players
+This class extends pygame Sprite class
+"""
 class Players(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -215,7 +218,10 @@ class Players(pygame.sprite.Sprite):
     def draw_player(self):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
 
-
+"""Class Plataform
+Contains all attributes and methods to Plataform
+This class extends pygame Sprite class
+"""
 class Plataform(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -227,17 +233,16 @@ class Plataform(pygame.sprite.Sprite):
 
     def draw_plataform(self):
         pygame.draw.rect(win, self.color, (self.xp, self.yp, self.width, self.height))
-
-
-class Tokens(pygame.sprite.Sprite):
+"""Class Tokens
+Contains all attributes and methods to Tokens
+This class extends pygame Sprite class
+"""
+class Tokens (pygame.sprite.Sprite):
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.color = (0, 0, 0, 0)
-
-        self.shape=""
-        self.x=0
-        self.y=0
-
+        super().__init__()
+        self.image=pygame.image.load("triangulo.png")
+        self.image.set_colorkey(255,255,255)
+        self.rect=self.image.get_rect()#Obtenemos las coordenadas del Sprite
 
 
 main_menu()
