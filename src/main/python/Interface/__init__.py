@@ -10,6 +10,7 @@ This class extends pygame Sprite class
 class Players(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
+        self.image=""
         self.x = 240
         self.y = 360
         self.Jump = False
@@ -17,6 +18,7 @@ class Players(pygame.sprite.Sprite):
         self.color = (0, 0, 0)
         self.width = 40
         self.height = 60
+        self.rect=pygame.Rect((self.x,self.y),(self.width,self.height))
 
     def draw_player(self):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
@@ -79,16 +81,17 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(textobj, textrect)
     "Show Tokens"
 tokens_arr=pygame.sprite.Group() #Almacenar tokens de la clase de aquí cuando ya esté dibujados
-allspriteslist=pygame.sprite.Group()
+all_sprites_list=pygame.sprite.Group()
+player_arr=pygame.sprite.Group()
 
-for i in range(2):
-    triangule=Tokens()
-    triangule.rect.x=random.randrange(840)
-    triangule.rect.y=random.randrange(600)
-    tokens_arr.add(triangule)
-    allspriteslist.add(triangule)
-    allspriteslist.draw(win)
-
+def drawtokens():
+    for i in range(3):
+        triangule=Tokens()
+        triangule.rect.x=random.randrange(600)
+        triangule.rect.y=random.randrange(400)
+        tokens_arr.add(triangule)
+        all_sprites_list.add(triangule)
+        all_sprites_list.draw(win)
 
 def main_menu():
     while True:
@@ -123,10 +126,18 @@ def main_menu():
 """This function is responsible for running the game"""
 def game():
     check_msg()
+    drawtokens()
     # socket.send_msg(tokens[0].__dict__)
     player1 = Players()
     player2 = Players()
-
+    player1.image="Player1.png"
+    player2.image="Player2.png"
+    all_sprites_list.add(player1)
+    all_sprites_list.add(player2)
+    player_arr.add(player1)
+    player_arr.add(player2)
+    tokens_hit_arr=pygame.sprite.spritecollide(player1,tokens_arr,True)
+    tokens_hit_arr=pygame.sprite.spritecollide(player2,tokens_arr,True)
     plataform1 = Plataform()
     plataform2 = Plataform()
     plataform3 = Plataform()
@@ -152,7 +163,7 @@ def game():
                 if event.key == pygame.K_ESCAPE:
                     running = False
         keys = pygame.key.get_pressed()
-        allspriteslist.draw(win)
+        tokens_arr.draw(win)
         # Collitions
         if player1.y <= plataform1.yp + player1.height:
             player1.y = plataform1.yp - player1.height
@@ -221,6 +232,7 @@ def game():
             else:
                 player2.Jump = False
                 player2.jumpCount = 10
+
         "Instances"
         player1.color = 255, 0, 0
         player2.color = 0, 0, 255
