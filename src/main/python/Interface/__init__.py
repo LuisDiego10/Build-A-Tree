@@ -174,6 +174,7 @@ def game():
 
         if player1.y <= plataform_princ.yp + player1.height and plataform_princ.xp - player1.width <= player1.x <= 710:
             player1.y = plataform_princ.yp - player1.height
+            player1.jumpCount = 15
         else:
             player1.y += falling_velocity
 
@@ -184,17 +185,17 @@ def game():
         if keys[pygame.K_RIGHT] and player1.x < 850:
             player1.x += 15
 
-        '''if keys[pygame.K_UP] and player1.y > 100:
-            if player1.jumpCount >= -30:
+        if keys[pygame.K_UP] and player1.y > 100:
+            if player1.jumpCount >= 0:
                 neg = 1
                 if player1.jumpCount < 0:
                     neg = -1
-                player1.y -= (player1.jumpCount ** 2) * 0.5 * neg
+                player1.y -= (player1.jumpCount * 4)-(player1.jumpCount**0.5//1)
                 player1.jumpCount -= 1
 
             else:
                 player1.Jump = False
-                player1.jumpCount = 10'''
+                player1.jumpCount = 10
 
         # Player 2 Keys
         if keys[pygame.K_a] and player2.x > 10:
