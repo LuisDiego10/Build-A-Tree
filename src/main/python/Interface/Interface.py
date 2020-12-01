@@ -32,7 +32,7 @@ font = pygame.font.SysFont(None, 80)
 tokens_list = pygame.sprite.Group()
 all_sprite_list = pygame.sprite.Group()
 
-for i in range(10):
+for i in range(90):
     triangule = Tokens()
     triangule.image=pygame.image.load("triangulo.png")
     triangule.rect.x = random.randrange(900)
@@ -42,6 +42,7 @@ for i in range(10):
     all_sprite_list.add(triangule)
 
 player1 = Player()
+player1.rect.x=500
 player2=Player()
 player2.image=pygame.image.load("Player2.png")
 all_sprite_list.add(player1)
@@ -104,6 +105,22 @@ def game():
         if keys[pygame.K_RIGHT] and player1.rect.x < 800:
             player1.rect.x += 15
 
+        if not player1.Jump:
+            if keys[pygame.K_UP] and player1.rect.y>100:
+                player1.Jump=True
+            if keys[pygame.K_DOWN] and player1.rect.y<500:
+                player1.rect.y+=5
+        else:
+            if player1.jumpCount>=-10:
+                neg=1
+                if player1.jumpCount<0:
+                    neg=-1
+                player1.rect.y-=(player1.jumpCount**2)*0.5*neg
+                player1.jumpCount-=1
+            else:
+                player1.Jump=False
+                player1.jumpCount=10
+                
         if keys[pygame.K_UP] and player1.rect.y > 100:
             if player1.jumpCount >= 0:
                 neg = 1
