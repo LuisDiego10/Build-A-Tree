@@ -21,7 +21,13 @@ class Player(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         self.rect.x=240
         self.rect.y=360
-
+class Plataforms(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image=pygame.image.load("circulo.png")
+        self.rect=self.image.get_rect()
+        self.rect.x=240
+        self.rect.y=360
 
 background = pygame.image.load("backgound.jpg")
 pygame.init()
@@ -41,12 +47,15 @@ for i in range(90):
     tokens_list.add(triangule)
     all_sprite_list.add(triangule)
 
+#Instances
 player1 = Player()
 player1.rect.x=500
 player2=Player()
 player2.image=pygame.image.load("Player2.png")
+plataform1=Plataforms()
 all_sprite_list.add(player1)
 all_sprite_list.add(player2)
+all_sprite_list.add(plataform1)
 
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
