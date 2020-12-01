@@ -50,8 +50,8 @@ class ClientSocket(threading.Thread):
 
                 else:
                     object = Factory.token()
-                    object.int_value = sub_object["int_value"]
-                    object.tree_type = sub_object["tree_type"]
+                    object.int_value = sub_object["value"]
+                    object.tree_type = sub_object["type"]
                     self.tokens.append(object)
                     print("a4")
             except json.JSONDecodeError:
