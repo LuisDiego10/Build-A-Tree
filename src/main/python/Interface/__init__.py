@@ -10,8 +10,8 @@ This class extends pygame Sprite class
 class Players(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.x = 220
-        self.y = 320
+        self.x = 240
+        self.y = 360
         self.Jump = False
         self.jumpCount = 10
         self.color = (0, 0, 0)
@@ -154,27 +154,26 @@ def game():
         keys = pygame.key.get_pressed()
         allspriteslist.draw(win)
         # Collitions
-        if player1.y <= plataform1.yp + player1.height and player1.y + falling_velocity >= plataform1.yp - player1.height:
+        if player1.y <= plataform1.yp + player1.height:
             player1.y = plataform1.yp - player1.height
 
         else:
             player1.y += falling_velocity
 
-        if player1.y <= plataform2.yp + player1.height and player1.y + falling_velocity >= plataform2.yp - player1.height:
+        if player1.y <= plataform2.yp + player1.height:
             player1.y = plataform2.yp - player1.height
 
         else:
             player1.y += falling_velocity
 
-        if player1.y <= plataform3.yp + player1.height and player1.y + falling_velocity >= plataform3.yp - player1.height:
+        if player1.y <= plataform3.yp + player1.height:
             player1.y = plataform3.yp - player1.height
 
         else:
             player1.y += falling_velocity
 
-        if player1.y <= plataform_princ.yp + player1.height and player1.y + falling_velocity >= plataform_princ.yp - player1.height:
+        if player1.y <= plataform_princ.yp + player1.height and plataform_princ.xp - player1.width <= player1.x <= 710:
             player1.y = plataform_princ.yp - player1.height
-
         else:
             player1.y += falling_velocity
 
@@ -185,10 +184,10 @@ def game():
         if keys[pygame.K_RIGHT] and player1.x < 850:
             player1.x += 15
 
-        if not player1.Jump:
-            if keys[pygame.K_UP] and player1.y > 100:
-                player1.Jump = True
-
+        if keys[pygame.K_UP] and player1.y > 100:
+            if player1.jumpCount <= 0:
+                if player1.jumpCount >= -30:
+                    player1.y -= (player1.jumpCount ** 2) * 0.5
         else:
             if player1.jumpCount >= -30:
                 neg = 1
