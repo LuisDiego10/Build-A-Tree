@@ -57,7 +57,7 @@ font = pygame.font.SysFont(None, 80)
 ##Tokens
 tokens_list = pygame.sprite.Group()
 all_sprite_list = pygame.sprite.Group()
-all_platforms_list = pygame.sprite.Sprite()
+all_platforms_list = pygame.sprite.Group()
 
 for i in range(9):
     triangule = Tokens()
