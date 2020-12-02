@@ -3,14 +3,17 @@ import random
 
 import Factory
 import Socket
+
 """Class Players
 Contains all attributes and methods to Players
 This class extends pygame Sprite class
 """
+
+
 class Players(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image=""
+        self.image = ""
         self.x = 240
         self.y = 360
         self.Jump = False
@@ -18,15 +21,18 @@ class Players(pygame.sprite.Sprite):
         self.color = (0, 0, 0)
         self.width = 40
         self.height = 60
-        self.rect=pygame.Rect((self.x,self.y),(self.width,self.height))
+        self.rect = pygame.Rect((self.x, self.y), (self.width, self.height))
 
     def draw_player(self):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
+
 
 """Class Plataform
 Contains all attributes and methods to Plataform
 This class extends pygame Sprite class
 """
+
+
 class Plataform(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -38,15 +44,24 @@ class Plataform(pygame.sprite.Sprite):
 
     def draw_plataform(self):
         pygame.draw.rect(win, self.color, (self.xp, self.yp, self.width, self.height))
+
+
 """Class Tokens
 Contains all attributes and methods to Tokens
 This class extends pygame Sprite class
 """
-class Tokens (pygame.sprite.Sprite):
+
+class Tokens(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image=pygame.image.load("triangulo.png")
-        self.rect=self.image.get_rect()#Obtenemos las coordenadas del Sprite
+        self.image = pygame.image.load("circulo.png")
+        self.rect = self.image.get_rect()
+
+    def update(self):
+        self.rect.y += 1
+        if self.rect.y > 600:
+            self.rect.y = -10
+            self.rect.x = random.randrange(600)
 
 background = pygame.image.load("backgound.jpg")
 pygame.init()
@@ -60,6 +75,8 @@ socket = Socket.ClientSocket()
 socket.start()
 challenge = None
 tokens = []
+
+
 # Functions for socket#
 def check_msg():
     global socket, challenge, tokens
@@ -80,18 +97,22 @@ def draw_text(text, font, color, surface, x, y):
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
     "Show Tokens"
-tokens_arr=pygame.sprite.Group() #Almacenar tokens de la clase de aquí cuando ya esté dibujados
-all_sprites_list=pygame.sprite.Group()
-player_arr=pygame.sprite.Group()
+
+
+tokens_arr = pygame.sprite.Group()  # Almacenar tokens de la clase de aquí cuando ya esté dibujados
+all_sprites_list = pygame.sprite.Group()
+player_arr = pygame.sprite.Group()
+
 
 def drawtokens():
     for i in range(3):
-        triangule=Tokens()
-        triangule.rect.x=random.randrange(600)
-        triangule.rect.y=random.randrange(400)
+        triangule = Tokens()
+        triangule.rect.x = random.randrange(600)
+        triangule.rect.y = random.randrange(400)
         tokens_arr.add(triangule)
         all_sprites_list.add(triangule)
         all_sprites_list.draw(win)
+
 
 def main_menu():
     while True:
@@ -123,21 +144,24 @@ def main_menu():
 
         pygame.display.update()
 
+
 """This function is responsible for running the game"""
+
+
 def game():
     check_msg()
     drawtokens()
     # socket.send_msg(tokens[0].__dict__)
     player1 = Players()
     player2 = Players()
-    player1.image="Player1.png"
-    player2.image="Player2.png"
+    player1.image = "Player1.png"
+    player2.image = "Player2.png"
     all_sprites_list.add(player1)
     all_sprites_list.add(player2)
     player_arr.add(player1)
     player_arr.add(player2)
-    tokens_hit_arr=pygame.sprite.spritecollide(player1,tokens_arr,True)
-    tokens_hit_arr=pygame.sprite.spritecollide(player2,tokens_arr,True)
+    tokens_hit_arr = pygame.sprite.spritecollide(player1, tokens_arr, True)
+    tokens_hit_arr = pygame.sprite.spritecollide(player2, tokens_arr, True)
     plataform1 = Plataform()
     plataform2 = Plataform()
     plataform3 = Plataform()
@@ -201,7 +225,7 @@ def game():
                 neg = 1
                 if player1.jumpCount < 0:
                     neg = -1
-                player1.y -= (player1.jumpCount * 4)-(player1.jumpCount**0.5//1)
+                player1.y -= (player1.jumpCount * 4) - (player1.jumpCount ** 0.5 // 1)
                 player1.jumpCount -= 1
 
             else:

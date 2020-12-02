@@ -13,7 +13,7 @@ class ClientSocket(threading.Thread):
         self.socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket_client.connect((Host, 996))
         self.tokens = []
-        self.challenge=None
+        self.challenge = None
 
     def run(self):
         while True:
@@ -24,7 +24,7 @@ class ClientSocket(threading.Thread):
             self.recieve_msg(msg)
 
     def send_msg(self, msg):
-        msg=json.dumps(msg)
+        msg = json.dumps(msg)
         self.socket_client.send(len(msg).to_bytes((msg.__sizeof__().bit_length() + 7) // 8, 'big'))
         msg = msg.encode(encoding='UTF-8', errors='strict')
         self.socket_client.sendall(msg)
@@ -45,8 +45,8 @@ class ClientSocket(threading.Thread):
                     object.deep = sub_object["deep"]
                     object.treeType = sub_object["treeType"]
                     object.order = sub_object["order"]
-                    self.challenge=object
-                    print("a4")
+                    self.challenge = object
+                    print("a3")
 
                 else:
                     object = Factory.token()

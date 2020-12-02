@@ -64,9 +64,6 @@ public class SocketServer extends Thread {
                 } catch (JsonProcessingException e) {
                     logger.error("error creating the token from server"+e);
                 }
-
-                token.player=1;
-                System.out.print(token.player+"\n");
                 Server.playToken(token);
 
 

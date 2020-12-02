@@ -1,5 +1,8 @@
 import pygame
 import random
+import time
+
+import Socket
 
 
 class Tokens(pygame.sprite.Sprite):
@@ -7,6 +10,7 @@ class Tokens(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load("circulo.png")
         self.rect = self.image.get_rect()
+        self.token = None
 
     def update(self):
         self.rect.y += 1
@@ -18,6 +22,7 @@ class Tokens(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     cambio_y = 0
     cambio_x = 0
+
     def __init__(self):
         super().__init__()
         self.Jump = False
@@ -33,12 +38,14 @@ class Player(pygame.sprite.Sprite):
         else:
             self.cambio_y += .35
 
-        if self.rect.y >= 590 - self.rect.height and self.cambio_y >=0:
+        if self.rect.y >= 590 - self.rect.height and self.cambio_y >= 0:
             self.cambio_y = 0
             self.rect.y = 590 - self.rect.height
+
     def update(self):
         self.calc_grav()
         self.rect.x += self.cambio_x
+
 
 class Plataforms(pygame.sprite.Sprite):
     def __init__(self):
@@ -54,19 +61,59 @@ pygame.init()
 win = pygame.display.set_mode((1200, 600))
 pygame.display.set_caption("Build-A-Tree")
 font = pygame.font.SysFont(None, 80)
+
+# //////Sockets/////// #
+#   global Variables  #
+socket = Socket.ClientSocket()
+socket.start()
+time.sleep(2)
+challenge = None
+tokens = []
+
+
+# Functions for socket#
+def check_msg():
+    global socket, challenge, tokens
+    print("a6")
+    tokens = socket.tokens
+    for x in tokens:
+        create = True
+        print("a8")
+        for a in tokens_list.sprites():
+            if x == a.token:
+                print("a11")
+                create = False
+
+        if create:
+            figure = Tokens()
+            figure.token = x
+            if x.tree_type == "class BST.BST":
+                figure.image = pygame.image.load("rombo.png")
+            if x.tree_type == "class SPLAY.SPLAYTree":
+                figure.image = pygame.image.load("triangulo.png")
+            if x.tree_type == "class BTree.Btree":
+                figure.image = pygame.image.load("cuadrado.png")
+            if x.tree_type == "class AVL.AVL":
+                figure.image = pygame.image.load("circulo.png")
+            figure.rect.x = random.randrange(900)
+            figure.rect.y = random.randrange(600)
+            tokens_list.add(figure)
+            all_sprite_list.add(figure)
+
+    if socket.challenge != challenge:
+        challenge = socket.challenge
+    else:
+        pass
+
+
+# ////////////////////#
+
 ##Tokens
 tokens_list = pygame.sprite.Group()
 all_sprite_list = pygame.sprite.Group()
 all_platforms_list = pygame.sprite.Group()
 
-for i in range(9):
-    triangule = Tokens()
-    triangule.image = pygame.image.load("triangulo.png")
-    triangule.rect.x = random.randrange(900)
-    triangule.rect.y = random.randrange(600)
-
-    tokens_list.add(triangule)
-    all_sprite_list.add(triangule)
+check_msg()
 
 # Instances
 player1 = Player()
@@ -85,8 +132,6 @@ plataform3 = Plataforms()
 plataform3.rect.x = 670
 plataform3.rect.y = 300
 plataform3.image = plataform2.image
-
-
 
 all_sprite_list.add(player1)
 all_sprite_list.add(player2)
@@ -139,7 +184,9 @@ def main_menu():
 
 def game():
     running = True
+
     while running:
+        check_msg()
         pygame.time.delay(100)
         win.fill((0, 0, 0))
         win.blit(background, [-1000, 0])
@@ -213,7 +260,16 @@ def game():
                 player2.jumpCount = 10
         tokens_list.update()
         tokens_hit_list = pygame.sprite.spritecollide(player1, tokens_list, True)
+        for x in tokens_hit_list:
+            x.token.player = 1
+            socket.send_msg(x.token.__dict__)
+            socket.tokens.remove(x.token)
+
         tokens_hit_list = pygame.sprite.spritecollide(player2, tokens_list, True)
+        for x in tokens_hit_list:
+            x.token.player = 2
+            socket.send_msg(x.token.__dict__)
+
         all_sprite_list.draw(win)
         pygame.display.flip()
         pygame.display.update()
