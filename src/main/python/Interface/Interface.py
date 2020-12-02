@@ -4,6 +4,18 @@ import time
 
 import Socket
 
+# ///////Constants///////#
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+
+height_win = 800
+width_win = 1200
+
+
+# ///////Constants///////#
 
 class Tokens(pygame.sprite.Sprite):
     def __init__(self):
@@ -20,8 +32,9 @@ class Tokens(pygame.sprite.Sprite):
 
 
 class Player(pygame.sprite.Sprite):
-    cambio_y = 0
-    cambio_x = 0
+    change_x = 0
+    change_y = 0
+    level = 0
 
     def __init__(self):
         super().__init__()
@@ -29,31 +42,88 @@ class Player(pygame.sprite.Sprite):
         self.jumpCount = 10
         self.image = pygame.image.load("Player1.png")
         self.rect = self.image.get_rect()
-        self.rect.x = 240
-        self.rect.y = 360
-
-    def calc_grav(self):
-        if self.cambio_y == 0:
-            self.cambio_y = 1
-        else:
-            self.cambio_y += .35
-
-        if self.rect.y >= 590 - self.rect.height and self.cambio_y >= 0:
-            self.cambio_y = 0
-            self.rect.y = 590 - self.rect.height
 
     def update(self):
         self.calc_grav()
-        self.rect.x += self.cambio_x
+        self.rect.x += self.change_x
+        hit_block_list = pygame.sprite.spritecollide(self, self.level.plataform_list, False)
+
+        for block in hit_block_list:
+            if self.change_x > 0:
+                self.rect.right = block.rect.left
+            elif self.change_x < 0:
+                self.rect.left = block.rect.right
+        self.rect.y += self.change_y
+        hit_block_list = pygame.sprite.spritecollide(self, self.level.plataform_list, False)
+
+        for block in hit_block_list:
+            if self.change_y > 0:
+                self.rect.bottom = block.rect.top
+            elif self.change_y < 0:
+                self.rect.top = block.rect.bottom
+            self.change_y = 0
+
+    def calc_grav(self):
+        if self.change_y == 0:
+            self.change_y = 1
+        else:
+            self.change_y += .35
+
+    def jump(self):
+        self.rect.y += 2
+        hit_plataform_list = pygame.sprite.spritecollide(self, self.level.plataform_list, False)
+        self.rect.y -= 2
+        if len(hit_plataform_list) > 0 or self.rect.bottom >= height_win:
+            self.change_y = -10
+
+    def left(self):
+        self.change_x = -6
+
+    def right(self):
+        self.change_x = 6
+
+    def stop(self):
+        self.change_x = 0
 
 
 class Plataforms(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, height, width):
         super().__init__()
-        self.image = pygame.image.load("Plataforma.png")
+        # self.image=pygame.image.load("Plataform.png")
+        # self.image= pygame.image.load("Plataform.png")
+        self.image = pygame.Surface([height, width])
+        self.image.fill(GREEN)
         self.rect = self.image.get_rect()
-        self.rect.x = 240
-        self.rect.y = 480
+
+
+class Level(object):
+    def __init__(self, player1):
+        self.plataform_list = pygame.sprite.Group()
+        self.player1 = player1
+
+    def update(self):
+        self.plataform_list.update()
+
+    def draw(self, win):
+        background = pygame.image.load("backgound.jpg")
+        win.blit(background, [0, 0])
+        self.plataform_list.draw(win)
+
+
+class Level1(Level):
+    def __init__(self, player1):
+        Level.__init__(self, player1)
+        level = [[210, 70, 800, 500],
+                 [210, 70, 340, 700],
+                 [210, 70, 500, 600],
+                 [210, 70, 400, 400],
+                 ]
+        for plataform in level:
+            block = Plataforms(plataform[0], plataform[1])
+            block.rect.x = plataform[2]
+            block.rect.y = plataform[3]
+            block.player1 = self.player1
+            self.plataform_list.add(block)
 
 
 background = pygame.image.load("backgound.jpg")
@@ -108,41 +178,13 @@ def check_msg():
 
 # ////////////////////#
 
-##Tokens
+# Tokens#
+
 tokens_list = pygame.sprite.Group()
 all_sprite_list = pygame.sprite.Group()
 all_platforms_list = pygame.sprite.Group()
 
 check_msg()
-
-# Instances
-player1 = Player()
-player1.rect.x = 500
-player2 = Player()
-player2.image = pygame.image.load("Player2.png")
-
-plataform1 = Plataforms()
-
-plataform2 = Plataforms()
-plataform2.rect.x = 20
-plataform2.rect.y = 300
-plataform2.image = pygame.transform.scale(plataform2.image, (220, 60))
-
-plataform3 = Plataforms()
-plataform3.rect.x = 670
-plataform3.rect.y = 300
-plataform3.image = plataform2.image
-
-all_sprite_list.add(player1)
-all_sprite_list.add(player2)
-all_sprite_list.add(plataform1)
-all_sprite_list.add(plataform2)
-all_sprite_list.add(plataform3)
-
-all_platforms_list.add(plataform1)
-all_platforms_list.add(plataform2)
-all_platforms_list.add(plataform3)
-
 
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
@@ -184,95 +226,69 @@ def main_menu():
 
 def game():
     running = True
-
-    while running:
+    pygame.init()
+    dimentions = [width_win, height_win]
+    win = pygame.display.set_mode(dimentions)
+    pygame.display.set_caption("BUILD-A-TREE")
+    player1 = Player()
+    level_list = []
+    level_list.append(Level1(player1))
+    levelact_no = 0
+    levelact = level_list[levelact_no]
+    all_sprite_list = pygame.sprite.Group()
+    player1.level = levelact
+    player1.rect.x = 340
+    player1.rect.y = height_win - player1.rect.height
+    all_sprite_list.add(player1)
+    done = False
+    clock = pygame.time.Clock()
+    while not done:
         check_msg()
-        pygame.time.delay(100)
-        win.fill((0, 0, 0))
-        win.blit(background, [-1000, 0])
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
+                done = True
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    running = False
-        keys = pygame.key.get_pressed()
-        # Collitions
-        # Player 1 Keys
-        if keys[pygame.K_LEFT] and player1.rect.x > 10:
-            player1.rect.x -= 15
+                if event.key == pygame.K_LEFT:
+                    player1.left()
+                if event.key == pygame.K_RIGHT:
+                    player1.right()
+                if event.key == pygame.K_UP:
+                    player1.jump()
 
-        if keys[pygame.K_RIGHT] and player1.rect.x < 800:
-            player1.rect.x += 15
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT and player1.change_x < 0:
+                    player1.stop()
+                if event.key == pygame.K_RIGHT and player1.change_x > 0:
+                    player1.stop()
 
-        if not player1.Jump:
-            if keys[pygame.K_UP] and player1.rect.y > 100:
-                player1.Jump = True
-            if keys[pygame.K_DOWN] and player1.rect.y < 500:
-                player1.rect.y += 5
-        else:
-            if player1.jumpCount >= -10:
-                neg = 1
-                if player1.jumpCount < 0:
-                    neg = -1
-                player1.rect.y -= (player1.jumpCount ** 2) * 0.5 * neg
-                player1.jumpCount -= 1
-            else:
-                player1.Jump = False
-                player1.jumpCount = 10
-
-        if keys[pygame.K_UP] and player1.rect.y > 100:
-            if player1.jumpCount >= 0:
-                neg = 1
-                if player1.jumpCount < 0:
-                    neg = -1
-                player1.rect.y -= (player1.jumpCount * 4) - (player1.jumpCount ** 0.5 // 1)
-                player1.jumpCount -= 1
-
-            else:
-                player1.Jump = False
-                player1.jumpCount = 10
-
-        # Player 2 Keys
-        if keys[pygame.K_a] and player2.rect.x > 10:
-            player2.rect.x -= 15
-
-        if keys[pygame.K_d] and player2.rect.x < 850:
-            player2.rect.x += 15
-
-        if not player2.Jump:
-            if keys[pygame.K_w] and player2.rect.y > 100:
-                player2.Jump = True
-
-            if keys[pygame.K_s] and player2.rect.y < 500:
-                player2.rect.y += 5
-        else:
-            if player2.jumpCount >= -30:
-                neg = 1
-                if player2.jumpCount < 0:
-                    neg = -1
-                player2.rect.y -= (player2.jumpCount ** 2) * 0.5 * neg
-                player2.jumpCount -= 1
-
-            else:
-                player2.Jump = False
-                player2.jumpCount = 10
         tokens_list.update()
+
         tokens_hit_list = pygame.sprite.spritecollide(player1, tokens_list, True)
         for x in tokens_hit_list:
             x.token.player = 1
             socket.send_msg(x.token.__dict__)
             socket.tokens.remove(x.token)
 
-        tokens_hit_list = pygame.sprite.spritecollide(player2, tokens_list, True)
-        for x in tokens_hit_list:
-            x.token.player = 2
-            socket.send_msg(x.token.__dict__)
+        # tokens_hit_list = pygame.sprite.spritecollide(player2, tokens_list, True)
+        # for x in tokens_hit_list:
+        #     x.token.player = 2
+        #     socket.send_msg(x.token.__dict__)
 
+        all_sprite_list.update()
+        levelact.update()
+        if player1.rect.right > width_win:
+            player1.rect.right = width_win
+        if player1.rect.left < 0:
+            player1.rect.left = 0
+        levelact.draw(win)
         all_sprite_list.draw(win)
+        clock.tick(60)
         pygame.display.flip()
         pygame.display.update()
 
+    pygame.quit()
 
-main_menu()
+
+if __name__ == "__main__":
+    game()
