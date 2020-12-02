@@ -1,5 +1,10 @@
 import pygame
 import random
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
 class Tokens (pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -21,6 +26,8 @@ class Player(pygame.sprite.Sprite):
         self.rect=self.image.get_rect()
         self.rect.x=240
         self.rect.y=360
+    def update(self):
+        
 class Plataforms(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
