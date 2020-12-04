@@ -11,7 +11,7 @@ import BST.BST;
  */
 
 public class AVL extends BST {
-    AVLNode root;
+    public AVLNode root;
     //Heigh of tree
     int height(AVLNode node){
         if (node==null){
@@ -87,7 +87,7 @@ public class AVL extends BST {
     }
 
     public AVLNode insertAVL(int key){
-        return insert(root,key);
+        return root=insert(root,key);
     }
 
     /**

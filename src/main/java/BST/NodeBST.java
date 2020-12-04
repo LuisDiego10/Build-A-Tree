@@ -1,4 +1,7 @@
 package BST;
+
+import AVL.AVLNode;
+
 /**
  *Class Node
  * Declare attributes for BST tree
@@ -6,9 +9,10 @@ package BST;
  * @version 1.0
  * @since 21/11/2020
  */
-public class Node {
-    int key ;
-    Node left, right;
+public class NodeBST {
+    public int key ;
+    public NodeBST left;
+    public NodeBST right;
     /**
      * Constructor NodeBST
      * Declare standard attributes assign standard values
@@ -17,7 +21,7 @@ public class Node {
      * @version 1.0
      * @since 21/11/2020
      */
-    public Node (int item){
+    public NodeBST(int item){
         this.key=item;
         left=right=null;
     }

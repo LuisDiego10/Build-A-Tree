@@ -11,7 +11,7 @@ import SPLAY.SPLAYNode;
  * @since 21/11/2020
  */
 public class BST {
-    public Node root;
+    public NodeBST root;
     /**
      * BST constructor
      * @author Diego
@@ -33,10 +33,10 @@ public class BST {
     public void insert(int key){
         root=insertRecursive(root,key);
     }
-    Node insertRecursive(Node root,int key){
+    NodeBST insertRecursive(NodeBST root, int key){
         //tree is empty
         if (root==null){
-            root=new Node(key);
+            root=new NodeBST(key);
             return root;
         }
         //Traverse Tree
@@ -57,7 +57,7 @@ public class BST {
     void inorderBST() {
         inorderRecursive(root);
     }
-    void inorderRecursive(Node root){
+    void inorderRecursive(NodeBST root){
         if (root!=null){
             inorderRecursive(root.left);
             System.out.print(root.key+ " ");
@@ -80,7 +80,7 @@ public class BST {
         else
             return false;
     }
-    Node searchRecursive(Node root, int key){
+    NodeBST searchRecursive(NodeBST root, int key){
         if (root==null||root.key==key)
             return root;
         if (root.key>key)
@@ -92,8 +92,8 @@ public class BST {
 
     }
 
-    public SPLAYNode insertSplay( int item) {
-        return new SPLAYNode();
+    public NodeBST insertSplay( int item) {
+        return new NodeBST(item);
     }
 }
 /**

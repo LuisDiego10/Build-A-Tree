@@ -1,4 +1,7 @@
 package AVL;
+
+import BST.NodeBST;
+
 /**
  * Class AVLNode
  * Declare attributes for AVL tree
@@ -6,9 +9,9 @@ package AVL;
  * @version 1.0
  * @since 21/11/2020
  */
-public class AVLNode  {
-    int key,height;
-    AVLNode left,right;
+public class AVLNode {
+    public int key, height;
+    public AVLNode left, right;
     /**
      * Constructor AVLNode
      * Declare standard attributes and assign standard values

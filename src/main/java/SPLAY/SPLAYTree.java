@@ -1,6 +1,7 @@
 package SPLAY;
 
 import BST.BST;
+import BST.NodeBST;
 
 /**
  * Class SPLAY
@@ -10,14 +11,13 @@ import BST.BST;
  * @since 24/11/2020
  */
 public class SPLAYTree extends BST {
-    public SPLAYNode root;
 
     public SPLAYTree(int x){
         root=newNode(x);
     }
 
-    public static SPLAYNode newNode(int key){
-        SPLAYNode node=new SPLAYNode();
+    public static NodeBST newNode(int key){
+        NodeBST node=new NodeBST(key);
         node.key= key;
         node.left=node.right=null;
         return node;
@@ -32,8 +32,8 @@ public class SPLAYTree extends BST {
      * @since 24/11/2020
      */
     //Rotation Right
-    public static SPLAYNode rightRotate(SPLAYNode x){
-        SPLAYNode y=x.left;
+    public static NodeBST rightRotate(NodeBST x){
+        NodeBST y=x.left;
         x.left=y.right;
         y.right=x;
         return y;
@@ -48,8 +48,8 @@ public class SPLAYTree extends BST {
      * @since 24/11/2020
      */
     //Rotation Left
-    public static SPLAYNode leftRotate(SPLAYNode x){
-        SPLAYNode y=x.right;
+    public static NodeBST leftRotate(NodeBST x){
+        NodeBST y=x.right;
         x.right=y.left;
         y.left=x;
         return y;
@@ -63,11 +63,11 @@ public class SPLAYTree extends BST {
      * @version 1.0
      * @since 24/11/2020
      */
-    public SPLAYNode searchSPLAY(int key){
+    public NodeBST searchSPLAY(int key){
         return root=SPLAY(root,key);
     }
 
-    public SPLAYNode SPLAY(SPLAYNode node,int key){
+    public NodeBST SPLAY(NodeBST node,int key){
         if (node==null||node.key==key)
             return node;
         if (node.key>key){
@@ -102,12 +102,12 @@ public class SPLAYTree extends BST {
      * Method insert for herency
      * Used to insert value only whit the value
      * @param item
-     * @return SPLAYNode;
+     * @return NodeBST;
      * @author Isaac
      * @version 1.0
      * @since 24/11/2020
      */
-    public SPLAYNode insertSplay( int item) {
+    public NodeBST insertSplay( int item) {
         return insert(root,item);
     }
     /**
@@ -119,13 +119,13 @@ public class SPLAYTree extends BST {
      * @version 1.0
      * @since 24/11/2020
      */
-    public SPLAYNode insert(SPLAYNode node,int item){
+    public NodeBST insert(NodeBST node,int item){
         if (node==null)
             return newNode(item);
         node=SPLAY(node,item);
         if (node.key==item)
             return node;
-        SPLAYNode newnode=newNode(item);
+        NodeBST newnode=newNode(item);
         if (node.key>item){
             newnode.right=node;
             newnode.left=node.left;
@@ -146,7 +146,7 @@ public class SPLAYTree extends BST {
      * @since 24/11/2020
      */
 
-    public static void preOrder(SPLAYNode node)
+    public static void preOrder(NodeBST node)
     {
         if (node != null)
         {
