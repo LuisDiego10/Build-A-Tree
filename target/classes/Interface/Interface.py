@@ -273,10 +273,6 @@ def game():
                     player2.jump()
                 if event.key == pygame.K_k and player1.forcepush==True:
                     player2.rect.x+=1000
-                if event.key == pygame.K_e and player1.forcepush==True and pygame.sprite.collide_rect(player1, player2):
-                    player2.rect.x+=100
-                    player2.rect.y-=60
-
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT and player1.change_x < 0:
