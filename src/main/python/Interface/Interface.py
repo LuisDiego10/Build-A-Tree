@@ -38,6 +38,7 @@ class Player(pygame.sprite.Sprite):
     airjump = False
     shield = False
     forcepush = True
+    life_count = 5
 
     def __init__(self):
         super().__init__()
@@ -287,6 +288,9 @@ def game():
                 if event.key == pygame.K_e and player1.forcepush==True and pygame.sprite.collide_rect(player1, player2):
                     player2.rect.x+=100
                     player2.rect.y-=60
+                if event.key == pygame.K_r and player2.forcepush==True and pygame.sprite.collide_rect(player1, player2):
+                    player1.rect.x+=100
+                    player1.rect.y-=60
 
 
 
@@ -326,6 +330,18 @@ def game():
             player2.rect.right = width_win
         if player2.rect.left < 0:
             player2.rect.left = 0
+
+        if player1.rect.y > 800 and player1.life_count >= 1 :
+            player1.rect.y=320
+            player1.rect.x=520
+            player1.life_count -= 1
+
+        if player2.rect.y > 800 and player2.life_count >= 1 :
+            player2.rect.y=320
+            player2.rect.x=520
+            player2.life_count -= 1
+
+
 
         levelact.draw(win)
         all_sprite_list.draw(win)
