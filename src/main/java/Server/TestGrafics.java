@@ -3,8 +3,10 @@ package Server;
 import AVL.AVL;
 import BST.BST;
 import BST.NodeBST;
+import BTree.Btree;
 import Challenge.Challenge;
 import Challenge.Token;
+import AVL.AVLNode;
 import SPLAY.SPLAYTree;
 import Socket.SocketServer;
 import guru.nidi.graphviz.attribute.Font;
@@ -37,44 +39,35 @@ public class TestGrafics {
                 .graphAttr().with(Rank.dir(TOP_TO_BOTTOM))
                 .nodeAttr().with(Font.name("Arial"))
                 .linkAttr().with("class", "link-class")
-                .with(createNodes()
+                .with(sortTree(playerTree)
                 );
         Graphviz.fromGraph(g).height(150).render(Format.PNG).toFile(new File("example/ex1.png"));
     }
 
     public static BST createTree(){
         Random randomizer= new Random();
-        playerTree= new BST();
-        playerTree.insert(randomizer.nextInt(10));
-        playerTree.insert(randomizer.nextInt(10));
-        playerTree.insert(randomizer.nextInt(10));
-        playerTree.insert(randomizer.nextInt(10));
-        playerTree.insert(randomizer.nextInt(10));
-        playerTree.insert(randomizer.nextInt(10));
-        playerTree.insert(randomizer.nextInt(10));
+        playerTree= new SPLAYTree(1);
+        playerTree.insertSplay(randomizer.nextInt(10));
+        playerTree.insertSplay(randomizer.nextInt(10));
+        playerTree.insertSplay(randomizer.nextInt(10));
+        playerTree.insertSplay(randomizer.nextInt(10));
+        playerTree.insertSplay(randomizer.nextInt(10));
+        playerTree.insertSplay(randomizer.nextInt(10));
+        playerTree.insertSplay(randomizer.nextInt(10));
         return playerTree;
     }
 
-    public static Node createNodes(){
-
-        if (playerTree.root == null){
-            return node("");
+    public static Node sortTree(BST playerTree){
+        if (playerTree.getClass()==AVL.class){
+            return createNodesAVL(((AVL)playerTree).root);
         }
-        if (playerTree.root.left==null &playerTree.root.right==null ){
-            return node(String.valueOf(( playerTree.root.key)));
+        if (playerTree.getClass()== Btree.class){
+            ;
         }
-
-        if (playerTree.root.left==null &playerTree.root.right!=null ){
-            return node(String.valueOf(playerTree.root.key)).link(auxCreateNodes(playerTree.root.right));
-        }
-
-        if (playerTree.root.left!=null & playerTree.root.right==null ){
-            return node(String.valueOf(playerTree.root.key)).link(auxCreateNodes(playerTree.root.left));
-        }
-
-        return node(String.valueOf(playerTree.root.key)).link(auxCreateNodes(playerTree.root.left)).link(auxCreateNodes(playerTree.root.right));
+        return createNodes(playerTree.root);
     }
-    public static Node auxCreateNodes(NodeBST root){
+
+    public static Node createNodes(NodeBST root){
         if (root == null){
             return node("");
         }
@@ -83,14 +76,33 @@ public class TestGrafics {
         }
 
         if (root.left==null &root.right!=null ){
-            return node(String.valueOf(root.key)).link(auxCreateNodes(root.right));
+            return node(String.valueOf(root.key)).link(createNodes(root.right));
         }
 
         if (root.left!=null & root.right==null ){
-            return node(String.valueOf(root.key)).link(auxCreateNodes(root.left));
+            return node(String.valueOf(root.key)).link(createNodes(root.left));
         }
 
-        return node(String.valueOf(root.key)).link(auxCreateNodes(root.left)).link(auxCreateNodes(root.right));
+        return node(String.valueOf(root.key)).link(createNodes(root.left)).link(createNodes(root.right));
+    }
+
+    public static Node createNodesAVL(AVLNode root){
+        if (root == null){
+            return node("");
+        }
+        if (root.left==null &root.right==null ){
+            return node(String.valueOf(root.key));
+        }
+
+        if (root.left==null &root.right!=null ){
+            return node(String.valueOf(root.key)).link(createNodesAVL(root.right));
+        }
+
+        if (root.left!=null & root.right==null ){
+            return node(String.valueOf(root.key)).link(createNodesAVL(root.left));
+        }
+
+        return node(String.valueOf(root.key)).link(createNodesAVL(root.left)).link(createNodesAVL(root.right));
     }
 }
 
