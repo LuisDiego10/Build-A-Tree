@@ -35,6 +35,9 @@ class Player(pygame.sprite.Sprite):
     change_x = 0
     change_y = 0
     level = 0
+    airjump=False
+    shield=False
+    forcepush=True
 
     def __init__(self):
         super().__init__()
@@ -84,6 +87,7 @@ class Player(pygame.sprite.Sprite):
 
     def stop(self):
         self.change_x = 0
+
 
 
 class Plataforms(pygame.sprite.Sprite):
@@ -262,6 +266,8 @@ def game():
                     player2.right()
                 if event.key == pygame.K_w:
                     player2.jump()
+                if event.key == pygame.K_k and player1.forcepush==True:
+                    player2.rect.x+=1000
 
 
         if event.type == pygame.KEYUP:
