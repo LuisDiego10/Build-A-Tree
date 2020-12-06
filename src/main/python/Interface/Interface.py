@@ -229,6 +229,7 @@ def show_timer():
         aux += 1
     counter = font.render("Time: " + str(time), True, (0, 0, 0), (255, 255, 255))
     win.blit(counter, (100, 100))
+    pygame.display.update()
 
 
 def game():
