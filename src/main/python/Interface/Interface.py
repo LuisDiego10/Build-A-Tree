@@ -144,16 +144,12 @@ tokens = []
 # Functions for socket#
 def check_msg():
     global socket, challenge, tokens
-    print("a6")
     tokens = socket.tokens
     for x in tokens:
         create = True
-        print("a8")
         for a in tokens_list.sprites():
             if x == a.token:
-                print("a11")
                 create = False
-
         if create:
             figure = Tokens()
             figure.token = x
@@ -169,7 +165,6 @@ def check_msg():
             figure.rect.y = random.randrange(600)
             tokens_list.add(figure)
             all_sprite_list.add(figure)
-
     if socket.challenge != challenge:
         challenge = socket.challenge
     else:
@@ -198,9 +193,7 @@ def main_menu():
         win.fill((0, 0, 0))
         draw_text("Build-A-Tree's Main Menu", font, (255, 255, 255), win, 250, 20)
         draw_text("START", font, (255, 255, 255), win, 500, 200)
-
         click = False
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -214,7 +207,6 @@ def main_menu():
                     click = True
 
         mx, my = pygame.mouse.get_pos()
-
         button_start = pygame.Rect(550, 270, 75, 75)
         if button_start.collidepoint((mx, my)):
             if click:
@@ -242,6 +234,7 @@ def game():
     all_sprite_list.add(player1)
     done = False
     clock = pygame.time.Clock()
+
     while not done:
         check_msg()
 
@@ -283,6 +276,7 @@ def game():
             player1.rect.left = 0
         levelact.draw(win)
         all_sprite_list.draw(win)
+        tokens_list.draw(win)
         clock.tick(60)
         pygame.display.flip()
         pygame.display.update()
