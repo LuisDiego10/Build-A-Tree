@@ -35,9 +35,11 @@ class Player(pygame.sprite.Sprite):
     change_x = 0
     change_y = 0
     level = 0
-    airjump = False
-    shield = False
-    forcepush = True
+
+    airjump=True
+    shield=True
+    forcepush=True
+    beattacked=0
     life_count = 5
 
     def __init__(self):
@@ -50,7 +52,7 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.calc_grav()
         self.rect.x += self.change_x
-        hit_block_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
+        hit_block_list = pygame.sprite.spritecollide(self, self.level.plataform_list, False)
 
         for block in hit_block_list:
             if self.change_x > 0:
@@ -58,7 +60,7 @@ class Player(pygame.sprite.Sprite):
             elif self.change_x < 0:
                 self.rect.left = block.rect.right
         self.rect.y += self.change_y
-        hit_block_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
+        hit_block_list = pygame.sprite.spritecollide(self, self.level.plataform_list, False)
 
         for block in hit_block_list:
             if self.change_y > 0:
@@ -75,9 +77,9 @@ class Player(pygame.sprite.Sprite):
 
     def jump(self):
         self.rect.y += 2
-        hit_platform_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
+        hit_plataform_list = pygame.sprite.spritecollide(self, self.level.plataform_list, False)
         self.rect.y -= 2
-        if len(hit_platform_list) > 0 or self.rect.bottom >= height_win:
+        if len(hit_plataform_list) > 0 or self.rect.bottom >= height_win:
             self.change_y = -10
 
     def left(self):
@@ -90,7 +92,8 @@ class Player(pygame.sprite.Sprite):
         self.change_x = 0
 
 
-class Platforms(pygame.sprite.Sprite):
+
+class Plataforms(pygame.sprite.Sprite):
     def __init__(self, height, width):
         super().__init__()
         self.image = pygame.Surface([height, width])
@@ -101,17 +104,17 @@ class Platforms(pygame.sprite.Sprite):
 
 class Level(object):
     def __init__(self, player1, player2):
-        self.platform_list = pygame.sprite.Group()
+        self.plataform_list = pygame.sprite.Group()
         self.player1 = player1
         self.player2 = player2
 
     def update(self):
-        self.platform_list.update()
+        self.plataform_list.update()
 
     def draw(self, win):
         background = pygame.image.load("backgound.jpg")
         win.blit(background, [0, 0])
-        self.platform_list.draw(win)
+        self.plataform_list.draw(win)
 
 
 class Level1(Level):
@@ -121,15 +124,16 @@ class Level1(Level):
                  [210, 70, 135, 550],
                  [210, 70, 865, 550],
                  [210, 70, 390, 700],
-                 [210, 70, 590, 700]]
+                 [210, 70, 590, 700],
+                 [210, 70, 800, 650],]
 
-        for platform in level:
-            block = Platforms(platform[0], platform[1])
-            block.rect.x = platform[2]
-            block.rect.y = platform[3]
+        for plataform in level:
+            block = Plataforms(plataform[0], plataform[1])
+            block.rect.x = plataform[2]
+            block.rect.y = plataform[3]
             block.player1 = self.player1
             block.player2 = self.player2
-            self.platform_list.add(block)
+            self.plataform_list.add(block)
 
 
 background = pygame.image.load("backgound.jpg")
@@ -223,16 +227,6 @@ def main_menu():
         pygame.display.update()
 
 
-def show_timer():
-    aux = 1
-    time = pygame.time.get_ticks() / 1000
-    if aux == time:
-        aux += 1
-    counter = font.render("Time: " + str(time), True, (0, 0, 0), (255, 255, 255))
-    win.blit(counter, (100, 100))
-    pygame.display.update()
-
-
 def game():
     running = True
     pygame.init()
@@ -261,7 +255,6 @@ def game():
     all_sprite_list.add(player2)
     done = False
     clock = pygame.time.Clock()
-    show_timer()
 
     while not done:
         check_msg()
@@ -283,8 +276,6 @@ def game():
                 if event.key == pygame.K_w:
                     player2.jump()
 
-                if event.key == pygame.K_k and player1.forcepush==True:
-                    player2.rect.x+=1000
                 if event.key == pygame.K_e and player1.forcepush==True and pygame.sprite.collide_rect(player1, player2):
                     player2.rect.x+=100
                     player2.rect.y-=60
@@ -292,7 +283,34 @@ def game():
                     player1.rect.x+=100
                     player1.rect.y-=60
 
+                #Powers
+                if event.key == pygame.K_k and player1.forcepush==True and pygame.sprite.collide_rect(player1, player2):
+                    player2.rect.x+=20
+                    player2.rect.y-=50
+                    player2.beattacked=40
+                    all_sprite_list.draw(win)
+                    pygame.display.update()
 
+                if event.key == pygame.K_l and player1.forcepush==True and pygame.sprite.collide_rect(player1, player2):
+                    player2.rect.x-=20
+                    player2.rect.y-=50
+                    player2.beattacked=-40
+                    all_sprite_list.draw(win)
+                    pygame.display.update()
+
+                if event.key == pygame.K_f and player2.forcepush==True and pygame.sprite.collide_rect(player2, player1):
+                    player1.rect.x+=20
+                    player1.rect.y-=50
+                    player1.beattacked=40
+                    all_sprite_list.draw(win)
+                    pygame.display.update()
+
+                if event.key == pygame.K_g and player2.forcepush==True and pygame.sprite.collide_rect(player2, player1):
+                    player1.rect.x-=20
+                    player1.rect.y-=50
+                    player1.beattacked=-40
+                    all_sprite_list.draw(win)
+                    pygame.display.update()
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT and player1.change_x < 0:
@@ -303,6 +321,23 @@ def game():
                 player2.stop()
             if event.key == pygame.K_d and player2.change_x > 0:
                 player2.stop()
+
+        if player2.beattacked>0:
+            player2.rect.x+=10
+            player2.beattacked-=1
+
+        if player2.beattacked<0:
+            player2.rect.x-=10
+            player2.beattacked+=1
+
+        if player1.beattacked>0:
+            player1.rect.x+=10
+            player1.beattacked-=1
+
+        if player1.beattacked<0:
+            player1.rect.x-=10
+            player1.beattacked+=1
+
 
         tokens_list.update()
 
