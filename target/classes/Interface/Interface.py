@@ -451,18 +451,15 @@ def game():
         time1= pygame.time.get_ticks()/1000
         if aux == time1:
             aux+=1
-            print (time1)
-        contador = font.render("Tiempo : " +str(time1),0,(100,50,0))
+            print time1
 
 
         levelact.draw(win)
         all_sprite_list.draw(win)
         tokens_list.draw(win)
         clock.tick(60)
-        win.blit(contador, (10,10))
         pygame.display.flip()
         pygame.display.update()
-
 
     pygame.quit()
 
