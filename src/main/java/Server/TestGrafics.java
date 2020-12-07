@@ -160,6 +160,19 @@ public class TestGrafics {
             return node(String.valueOf(root.key));
         }
 
+    }
+
+    public static void createBtreeNode(BTreeNode BTreeNode){
+
+    }
+
+    public static void auxAddBTreeDisplay2(BTreeNode playertree){
+
+    }
+
+    public static void auxAddBTreeDisplay3(BTreeNode playertree){
+
+
         if (root.left==null &root.right!=null ){
             return node(String.valueOf(root.key)).link(createNodes(root.right));
         }
