@@ -43,6 +43,12 @@ public class Btree extends BST {
         else
             return this.root.search(k);
     }
+
+    @Override
+    public void insertB(int item) {
+        insert(item);
+    }
+
     /**
      * Method insert
      * Method to insert a key in this tree

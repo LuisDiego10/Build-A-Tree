@@ -1,6 +1,7 @@
 package BST;
 
 import AVL.AVLNode;
+import BTree.BTreeNode;
 import SPLAY.SPLAYNode;
 
 /**
@@ -94,6 +95,9 @@ public class BST {
 
     public NodeBST insertSplay( int item) {
         return new NodeBST(item);
+    }
+
+    public void insertB(int item) {
     }
 }
 /**

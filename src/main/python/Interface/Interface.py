@@ -36,10 +36,10 @@ class Player(pygame.sprite.Sprite):
     change_y = 0
     level = 0
 
-    airjump=True
-    shield=True
-    forcepush=True
-    beattacked=0
+    airjump = True
+    shield = True
+    forcepush = True
+    beattacked = 0
     life_count = 5
 
     def __init__(self):
@@ -92,7 +92,6 @@ class Player(pygame.sprite.Sprite):
         self.change_x = 0
 
 
-
 class Plataforms(pygame.sprite.Sprite):
     def __init__(self, height, width):
         super().__init__()
@@ -125,7 +124,7 @@ class Level1(Level):
                  [210, 70, 865, 550],
                  [210, 70, 390, 700],
                  [210, 70, 590, 700],
-                 [210, 70, 800, 650],]
+                 [210, 70, 800, 650], ]
 
         for plataform in level:
             block = Plataforms(plataform[0], plataform[1])
@@ -163,13 +162,13 @@ def check_msg():
         if create:
             figure = Tokens()
             figure.token = x
-            if x.tree_type == "class BST.BST":
+            if x.tree_type == "BST.BST":
                 figure.image = pygame.image.load("rombo.png")
-            if x.tree_type == "class SPLAY.SPLAYTree":
+            if x.tree_type == "SPLAY.SPLAYTree":
                 figure.image = pygame.image.load("triangulo.png")
-            if x.tree_type == "class BTree.Btree":
+            if x.tree_type == "BTree.Btree":
                 figure.image = pygame.image.load("cuadrado.png")
-            if x.tree_type == "class AVL.AVL":
+            if x.tree_type == "AVL.AVL":
                 figure.image = pygame.image.load("circulo.png")
             figure.rect.x = random.randrange(900)
             figure.rect.y = random.randrange(600)
@@ -276,39 +275,45 @@ def game():
                 if event.key == pygame.K_w:
                     player2.jump()
 
-                if event.key == pygame.K_e and player1.forcepush==True and pygame.sprite.collide_rect(player1, player2):
-                    player2.rect.x+=100
-                    player2.rect.y-=60
-                if event.key == pygame.K_r and player2.forcepush==True and pygame.sprite.collide_rect(player1, player2):
-                    player1.rect.x+=100
-                    player1.rect.y-=60
+                if event.key == pygame.K_e and player1.forcepush == True and pygame.sprite.collide_rect(player1,
+                                                                                                        player2):
+                    player2.rect.x += 100
+                    player2.rect.y -= 60
+                if event.key == pygame.K_r and player2.forcepush == True and pygame.sprite.collide_rect(player1,
+                                                                                                        player2):
+                    player1.rect.x += 100
+                    player1.rect.y -= 60
 
-                #Powers
-                if event.key == pygame.K_k and player1.forcepush==True and pygame.sprite.collide_rect(player1, player2):
-                    player2.rect.x+=20
-                    player2.rect.y-=50
-                    player2.beattacked=40
+                # Powers
+                if event.key == pygame.K_k and player1.forcepush == True and pygame.sprite.collide_rect(player1,
+                                                                                                        player2):
+                    player2.rect.x += 20
+                    player2.rect.y -= 50
+                    player2.beattacked = 40
                     all_sprite_list.draw(win)
                     pygame.display.update()
 
-                if event.key == pygame.K_l and player1.forcepush==True and pygame.sprite.collide_rect(player1, player2):
-                    player2.rect.x-=20
-                    player2.rect.y-=50
-                    player2.beattacked=-40
+                if event.key == pygame.K_l and player1.forcepush == True and pygame.sprite.collide_rect(player1,
+                                                                                                        player2):
+                    player2.rect.x -= 20
+                    player2.rect.y -= 50
+                    player2.beattacked = -40
                     all_sprite_list.draw(win)
                     pygame.display.update()
 
-                if event.key == pygame.K_f and player2.forcepush==True and pygame.sprite.collide_rect(player2, player1):
-                    player1.rect.x+=20
-                    player1.rect.y-=50
-                    player1.beattacked=40
+                if event.key == pygame.K_f and player2.forcepush == True and pygame.sprite.collide_rect(player2,
+                                                                                                        player1):
+                    player1.rect.x += 20
+                    player1.rect.y -= 50
+                    player1.beattacked = 40
                     all_sprite_list.draw(win)
                     pygame.display.update()
 
-                if event.key == pygame.K_g and player2.forcepush==True and pygame.sprite.collide_rect(player2, player1):
-                    player1.rect.x-=20
-                    player1.rect.y-=50
-                    player1.beattacked=-40
+                if event.key == pygame.K_g and player2.forcepush == True and pygame.sprite.collide_rect(player2,
+                                                                                                        player1):
+                    player1.rect.x -= 20
+                    player1.rect.y -= 50
+                    player1.beattacked = -40
                     all_sprite_list.draw(win)
                     pygame.display.update()
 
@@ -322,22 +327,21 @@ def game():
             if event.key == pygame.K_d and player2.change_x > 0:
                 player2.stop()
 
-        if player2.beattacked>0:
-            player2.rect.x+=10
-            player2.beattacked-=1
+        if player2.beattacked > 0:
+            player2.rect.x += 10
+            player2.beattacked -= 1
 
-        if player2.beattacked<0:
-            player2.rect.x-=10
-            player2.beattacked+=1
+        if player2.beattacked < 0:
+            player2.rect.x -= 10
+            player2.beattacked += 1
 
-        if player1.beattacked>0:
-            player1.rect.x+=10
-            player1.beattacked-=1
+        if player1.beattacked > 0:
+            player1.rect.x += 10
+            player1.beattacked -= 1
 
-        if player1.beattacked<0:
-            player1.rect.x-=10
-            player1.beattacked+=1
-
+        if player1.beattacked < 0:
+            player1.rect.x -= 10
+            player1.beattacked += 1
 
         tokens_list.update()
 
@@ -366,17 +370,15 @@ def game():
         if player2.rect.left < 0:
             player2.rect.left = 0
 
-        if player1.rect.y > 800 and player1.life_count >= 1 :
-            player1.rect.y=320
-            player1.rect.x=520
+        if player1.rect.y > 800 and player1.life_count >= 1:
+            player1.rect.y = 320
+            player1.rect.x = 520
             player1.life_count -= 1
 
-        if player2.rect.y > 800 and player2.life_count >= 1 :
-            player2.rect.y=320
-            player2.rect.x=520
+        if player2.rect.y > 800 and player2.life_count >= 1:
+            player2.rect.y = 320
+            player2.rect.x = 520
             player2.life_count -= 1
-
-
 
         levelact.draw(win)
         all_sprite_list.draw(win)
