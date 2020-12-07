@@ -8,11 +8,11 @@ package BTree;
  * @since 25/11/2020
  */
 public class BTreeNode {
-    int[] keys; // An array of keys
-    int t; // Minimum degree (defines the range for number of keys)
-    BTreeNode[] C; // An array of child pointers
-    int n; // Current number of keys
-    boolean leaf; // Is true when node is leaf. Otherwise false
+    public int[] keys; // An array of keys
+    public int t; // Minimum degree (defines the range for number of keys)
+    public BTreeNode[] C; // An array of child pointers
+    public int n; // Current number of keys
+    public boolean leaf; // Is true when node is leaf. Otherwise false
 
     /**
      * BtreeNode constructor
@@ -21,7 +21,7 @@ public class BTreeNode {
      * @version 1.0
      * @since 25/11/2020
      */
-    BTreeNode(int t, boolean leaf) {
+    public BTreeNode(int t, boolean leaf) {
         this.t = t;
         this.leaf = leaf;
         this.keys = new int[2 * t - 1];
