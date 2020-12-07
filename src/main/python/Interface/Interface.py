@@ -35,6 +35,7 @@ class Powers(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load("force-push.png")
         self.rect = self.image.get_rect()
+        self.rect.x =random.randrange(600)
 
     def update(self):
         self.rect.y += 1
@@ -93,6 +94,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y -= 2
         if len(hit_plataform_list) > 0 or self.rect.bottom >= height_win:
             self.change_y = -10
+
     def jump2(self):
         self.rect.y += 2
         hit_plataform_list = pygame.sprite.spritecollide(self, self.level.plataform_list, False)
@@ -234,10 +236,35 @@ def main_menu():
         if button_start.collidepoint((mx, my)):
             if click:
                 game()
-        pygame.draw.rect(win, (255, 0, 0), button_start)
+        pygame.draw.rect(win, (RED), button_start)
 
         pygame.display.update()
+def finish_game():
+    while True:
+        win.fill((0, 0, 0))
+        draw_text("The winner is: Player 1", font, (255, 255, 255), win, 250, 20)
+        draw_text("Score: 2000", font, (255, 255, 255), win, 450, 100)
+        click = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        mx, my = pygame.mouse.get_pos()
+        button_menu = pygame.Rect(550, 270, 75, 75)
+        if button_menu.collidepoint((mx, my)):
+            if click:
+                main_menu()
+        pygame.draw.rect(win, (BLUE), button_menu)
+
+        pygame.display.update()
 
 def game():
     running = True
@@ -278,41 +305,26 @@ def game():
     cycle_count=0
 
     while not done:
-        force_push.add(all_sprite_list)
-        air_jump.add(all_sprite_list)
-        shield.add(all_sprite_list)
         check_msg()
         cycle_count+=1
-        if cycle_count // 1080==1:
+        if cycle_count // 540==1:
             random_power=random.randint(1,3)
             print(random_power)
             if random_power==1:
                 cycle_count=0
                 force_push.update()
-                if pygame.sprite.collide_rect(player1,force_push):
-                    player1.forcepush=True
-
-                if pygame.sprite.collide_rect(player2,force_push):
-                    player2.forcepush=True
+                force_push.add(all_sprite_list)
 
             if random_power==2:
                 cycle_count=0
                 air_jump.update()
-                if pygame.sprite.collide_rect(player1,air_jump):
-                    player1.airjump=True
-
-                if pygame.sprite.collide_rect(player2,air_jump):
-                    player2.airjump=True
-
+                air_jump.add(all_sprite_list)
 
             if random_power==3:
                 cycle_count=0
                 shield.update()
-                if pygame.sprite.collide_rect(player1,shield):
-                    player1.shield=True
+                shield.add(all_sprite_list)
 
-                if pygame.sprite.collide_rect(player2,shield):
-                    player2.shield=True
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -331,6 +343,32 @@ def game():
                 if event.key == pygame.K_w:
                     player2.jump()
 
+                #Powers
+                if pygame.sprite.collide_rect(player1,force_push):
+                    player1.forcepush=True
+                    force_push.remove(all_sprite_list)
+
+                if pygame.sprite.collide_rect(player2,force_push):
+                    player2.forcepush=True
+                    force_push.remove(all_sprite_list)
+
+                if pygame.sprite.collide_rect(player1,air_jump):
+                    player1.airjump=True
+                    air_jump.remove(all_sprite_list)
+
+                if pygame.sprite.collide_rect(player2,air_jump):
+                    player2.airjump=True
+                    air_jump.remove(all_sprite_list)
+
+                if pygame.sprite.collide_rect(player1,shield):
+                    player1.shield=True
+                    shield.remove(all_sprite_list)
+
+                if pygame.sprite.collide_rect(player2,shield):
+                    player2.shield=True
+                    shield.remove(all_sprite_list)
+
+
                 if event.key == pygame.K_e and player1.normalhit == True and pygame.sprite.collide_rect(player1,
                                                                                                         player2):
                     player2.rect.x += 100
@@ -347,22 +385,25 @@ def game():
                     player2.rect.y -= 50
                     player2.beattacked = 40
                     all_sprite_list.draw(win)
+                    player1.forcepush=False
                     pygame.display.update()
 
-                if event.key == pygame.K_l and player1.forcepush == True and pygame.sprite.collide_rect(player1,
+                if event.key == pygame.K_l and player2.forcepush == True and pygame.sprite.collide_rect(player1,
                                                                                                         player2):
                     player2.rect.x -= 20
                     player2.rect.y -= 50
                     player2.beattacked = -40
                     all_sprite_list.draw(win)
+                    player2.forcepush=False
                     pygame.display.update()
 
-                if event.key == pygame.K_f and player2.forcepush == True and pygame.sprite.collide_rect(player2,
+                if event.key == pygame.K_f and player1.forcepush == True and pygame.sprite.collide_rect(player2,
                                                                                                         player1):
                     player1.rect.x += 20
                     player1.rect.y -= 50
                     player1.beattacked = 40
                     all_sprite_list.draw(win)
+                    player1.forcepush=False
                     pygame.display.update()
 
                 if event.key == pygame.K_g and player2.forcepush == True and pygame.sprite.collide_rect(player2,
@@ -371,6 +412,7 @@ def game():
                     player1.rect.y -= 50
                     player1.beattacked = -40
                     all_sprite_list.draw(win)
+                    player2.forcepush=False
                     pygame.display.update()
 
 
@@ -438,15 +480,24 @@ def game():
             player2.rect.x = 520
             player2.life_count -= 1
 
+        #AirJump
         if player2.rect.y >= 750 and player2.airjump == True:
             player2.jump2()
-        if player1.rect.y >= 750 and player2.airjump == True:
+            player2.airjump == False
+
+        if player1.rect.y >= 750 and player1.airjump == True:
             player1.jump2()
+            player1.airjump==False
 
         if player1.shield == True:
             player2.normalhit = False
             player2.forcepush = False
+            player1.shield= False
 
+        if player2.shield == True:
+            player1.normalhit = False
+            player1.forcepush = False
+            player2.shield= False
 
         levelact.draw(win)
         all_sprite_list.draw(win)
