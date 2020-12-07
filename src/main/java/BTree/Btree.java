@@ -65,12 +65,13 @@ public class Btree extends BST {
             if(this.root.n==2*t-1){
                 BTreeNode s =new BTreeNode(t,false);
                 s.C[0]=this.root;
-                s.splitChild(0,this.root);
-                int i=0;
-                if (s.keys[0]<k)
-                    i++;
-                s.C[i].insertNonFull(k);
                 this.root=s;
+                s.splitChild(0,s.C[0]);
+                int i=0;
+                if (s.keys[0]<k) {
+                    i++;
+                }
+                s.C[i].insertNonFull(k);
             }
             else{
                 root.insertNonFull(k);

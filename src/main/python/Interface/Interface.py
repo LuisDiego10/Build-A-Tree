@@ -149,7 +149,6 @@ time.sleep(2)
 challenge = None
 tokens = []
 
-
 # Functions for socket#
 def check_msg():
     global socket, challenge, tokens
@@ -178,7 +177,6 @@ def check_msg():
         challenge = socket.challenge
     else:
         pass
-
 
 # ////////////////////#
 

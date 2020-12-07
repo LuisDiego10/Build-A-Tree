@@ -1,4 +1,4 @@
-// Inserting a key on a B-tree in Java 
+package BTree;
 
 public class BTree2 {
 
@@ -6,10 +6,10 @@ public class BTree2 {
 
     // Node Creation
     public class Node {
-        int n;
-        int key[] = new int[2 * T - 1];
-        Node child[] = new Node[2 * T];
-        boolean leaf = true;
+        public int n;
+        public int key[] = new int[2 * T - 1];
+        public Node child[] = new Node[2 * T];
+        public boolean leaf = true;
 
         public int Find(int k) {
             for (int i = 0; i < this.n; i++) {
@@ -119,12 +119,13 @@ public class BTree2 {
 
     public static void main(String[] args) {
         BTree2 b = new BTree2(3);
-        b.insert(8);
-        b.insert(9);
         b.insert(10);
-        b.insert(11);
-        b.insert(15);
         b.insert(20);
+        b.insert(5);
+        b.insert(6);
+        b.insert(12);
+        b.insert(30);
+        b.insert(7);
         b.insert(17);
 
         b.display();

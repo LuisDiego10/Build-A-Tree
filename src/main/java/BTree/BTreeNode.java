@@ -109,7 +109,7 @@ public class BTreeNode {
         z.n=t-1;
         for (int j=0;j<t-1;j++){
             z.keys[j]=y.keys[j+t];
-        }if (y.leaf==false){
+        }if (!y.leaf){
             for (int j=0;j<t;j++){
                 z.C[j]=y.C[j+t];
             }
