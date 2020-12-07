@@ -1,11 +1,8 @@
 package Server;
 
-import AVL.AVL;
-import AVL.AVLNode;
-import BST.BST;
-import BST.NodeBST;
-import BTree.BTreeNode;
-import BTree.Btree;
+import AVL.*;
+import BST.*;
+import BTree.*;
 import Challenge.Challenge;
 import Challenge.Token;
 import SPLAY.SPLAYTree;
@@ -13,20 +10,32 @@ import Socket.SocketServer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import guru.nidi.graphviz.attribute.Font;
 import guru.nidi.graphviz.attribute.Rank;
-import guru.nidi.graphviz.engine.Format;
-import guru.nidi.graphviz.engine.Graphviz;
-import guru.nidi.graphviz.model.Graph;
-import guru.nidi.graphviz.model.MutableGraph;
-import guru.nidi.graphviz.model.Node;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+
+import guru.nidi.graphviz.attribute.Records;
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.model.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import static guru.nidi.graphviz.attribute.Rank.RankDir.TOP_TO_BOTTOM;
+import static guru.nidi.graphviz.attribute.Records.rec;
+import static guru.nidi.graphviz.model.Compass.*;
+import static guru.nidi.graphviz.model.Factory.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-import static guru.nidi.graphviz.attribute.Rank.RankDir.TOP_TO_BOTTOM;
-import static guru.nidi.graphviz.model.Factory.*;
+
+import java.util.Random;
+
+import java.io.IOException;
+
+import static guru.nidi.graphviz.model.Factory.node;
 
 public class Server {
     private static Logger logger = LogManager.getLogger("Server");
@@ -37,7 +46,8 @@ public class Server {
     static Token[] tokens= new Token[5];
     static Challenge actualChallenge;
     public static SocketServer serverSocket ;
-    public static TestGrafics grafics;
+    public static MutableGraph gr;
+    public static Graph ga;
 
 
     public static void main(String[] args) throws IOException {
@@ -110,34 +120,25 @@ public class Server {
             case 1:
                 playerOneTree=checkTree(playerOneTree,token);
                 if (playerOneTree!=null){
-                    TestGrafics.playerTree=playerOneTree;
-                    TestGrafics.player ="playerOneTree";
-                    grafics.start();
-
+                    displayTree(playerOneTree,"playerOneTree");
                 }
                 break;
             case 2:
                 playerTwoTree=checkTree(playerTwoTree,token);
                 if (playerTwoTree!=null){
-                    TestGrafics.playerTree=playerTwoTree;
-                    TestGrafics.player ="playerTwoTree";
-                    grafics.start();
+                    displayTree(playerTwoTree,"playerTwoTree");
                 }
                 break;
             case 3:
                 playerThreeTree=checkTree(playerThreeTree,token);
                 if (playerThreeTree!=null){
-                    TestGrafics.playerTree=playerThreeTree;
-                    TestGrafics.player ="playerThreeTree";
-                    grafics.start();
+                    displayTree(playerThreeTree,"playerThreeTree");
                 }
                 break;
             case 4:
                 playerfourthTree=checkTree(playerfourthTree,token);
                 if (playerfourthTree!=null){
-                    TestGrafics.playerTree=playerfourthTree;
-                    TestGrafics.player ="playerFourthTree";
-                    grafics.start();
+                    displayTree(playerfourthTree,"playerfourthTree");
                 }
                 break;
         }
@@ -188,5 +189,98 @@ public class Server {
 
 
         }
+    }
+
+
+    public static void displayTree(BST playerTree,String player){
+        if(playerTree.getClass()!=Btree.class) {
+            ga = graph("example1").directed()
+                    .graphAttr().with(Rank.dir(TOP_TO_BOTTOM))
+                    .nodeAttr().with(Font.name("Arial"))
+                    .linkAttr().with("class", "link-class")
+                    .with(sortTree(playerTree)
+                    );
+            try {
+                Graphviz.fromGraph(ga).height(150).render(Format.PNG).toFile(new File("src/main/python/Interface" + player + ".png"));
+            } catch (IOException e) {
+                logger.error("error trying to create the tree display of player: "+player+"\n"+e);
+            }
+        }else{
+
+        }
+    }
+    public static Node sortTree(BST playerTree){
+        if (playerTree.getClass()==AVL.class){
+            return createNodesAVL(((AVL)playerTree).root);
+        }
+        if (playerTree.getClass()== Btree.class){
+            ;
+        }
+        return createNodes(playerTree.root);
+    }
+    public static Node createNodes(NodeBST root){
+        if (root == null){
+            return node("");
+        }
+        if (root.left==null &root.right==null ){
+            return node(String.valueOf(root.key));
+        }
+
+        if (root.left==null &root.right!=null ){
+            return node(String.valueOf(root.key)).link(createNodes(root.right));
+        }
+
+        if (root.left!=null & root.right==null ){
+            return node(String.valueOf(root.key)).link(createNodes(root.left));
+        }
+
+        return node(String.valueOf(root.key)).link(createNodes(root.left)).link(createNodes(root.right));
+    }
+    public static Node createNodesAVL(AVLNode root){
+        if (root == null){
+            return node("");
+        }
+        if (root.left==null &root.right==null ){
+            return node(String.valueOf(root.key));
+        }
+
+        if (root.left==null &root.right!=null ){
+            return node(String.valueOf(root.key)).link(createNodesAVL(root.right));
+        }
+
+        if (root.left!=null & root.right==null ){
+            return node(String.valueOf(root.key)).link(createNodesAVL(root.left));
+        }
+
+        return node(String.valueOf(root.key)).link(createNodesAVL(root.left)).link(createNodesAVL(root.right));
+    }
+    public static void displayBtree(Btree playerTree,String player){
+        gr = mutGraph("example1").setDirected(true);
+            addBTreeDisplay(playerTree);
+        try {
+            Graphviz.fromGraph(gr).width(900).render(Format.PNG).toFile(new File("src/main/python/Interface" + player + ".png"));
+        } catch (IOException e) {
+            logger.error("Error creating the Btree image of player: "+player+"\n error: "+e);
+        }
+
+    }
+    public static void addBTreeDisplay(Btree playertree){
+        if(playertree.t==2){
+            auxAddBTreeDisplay2(playertree.root);
+        }else if(playertree.t==3){
+            auxAddBTreeDisplay3(playertree.root);
+        }
+        else if(playertree.t==4){
+            auxAddBTreeDisplay4(playertree.root);
+        }
+    }
+    public static void auxAddBTreeDisplay2(BTreeNode playertree){
+
+    }
+    public static void auxAddBTreeDisplay3(BTreeNode playertree){
+
+    }
+    public static void auxAddBTreeDisplay4(BTreeNode playertree){
+
     }
 }
