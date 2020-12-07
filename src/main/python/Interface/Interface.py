@@ -414,6 +414,7 @@ def game():
         for x in tokens_hit_list:
             x.token.player = 2
             socket.send_msg(x.token.__dict__)
+            socket.tokens.remove(x.token)
 
         all_sprite_list.update()
         levelact.update()
