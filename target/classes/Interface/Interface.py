@@ -39,7 +39,6 @@ class Player(pygame.sprite.Sprite):
     airjump = True
     shield = True
     forcepush = True
-    normalhit= True
     beattacked = 0
     life_count = 5
 
@@ -82,12 +81,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.y -= 2
         if len(hit_plataform_list) > 0 or self.rect.bottom >= height_win:
             self.change_y = -10
-    def jump2(self):
-        self.rect.y += 2
-        hit_plataform_list = pygame.sprite.spritecollide(self, self.level.plataform_list, False)
-        self.rect.y -= 2
-        if len(hit_plataform_list) > 0 or self.rect.bottom >= height_win:
-            self.change_y = -22
 
     def left(self):
         self.change_x = -6
@@ -282,13 +275,13 @@ def game():
                 if event.key == pygame.K_w:
                     player2.jump()
 
-                if event.key == pygame.K_e and player1.normalhit == True and pygame.sprite.collide_rect(player1,
+                if event.key == pygame.K_e and player1.forcepush == True and pygame.sprite.collide_rect(player1,
                                                                                                         player2):
                     player2.rect.x += 100
                     player2.rect.y -= 60
-                if event.key == pygame.K_r and player2.normalhit == True and pygame.sprite.collide_rect(player1,
+                if event.key == pygame.K_r and player2.forcepush == True and pygame.sprite.collide_rect(player1,
                                                                                                         player2):
-                    player1.rect.x -= 100
+                    player1.rect.x += 100
                     player1.rect.y -= 60
 
                 # Powers
@@ -323,8 +316,6 @@ def game():
                     player1.beattacked = -40
                     all_sprite_list.draw(win)
                     pygame.display.update()
-
-
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT and player1.change_x < 0:
@@ -388,17 +379,6 @@ def game():
             player2.rect.y = 320
             player2.rect.x = 520
             player2.life_count -= 1
-
-        if player2.rect.y >= 750 and player2.airjump == True:
-            player2.jump2()
-        if player1.rect.y >= 750 and player2.airjump == True:
-            player1.jump2()
-
-        if player1.shield == True:
-            player2.normalhit = False
-            player2.forcepush = False
-
-
 
         levelact.draw(win)
         all_sprite_list.draw(win)
