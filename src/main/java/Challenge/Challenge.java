@@ -14,14 +14,14 @@ public class Challenge {
 
     public Challenge(int tree,int deeper, int grade){
         if(tree==0){
-            treeType= String.valueOf(BST.class);
+            treeType= String.valueOf(BST.class.getName());
         }else if(tree==1){
-            treeType= String.valueOf(AVL.class);
+            treeType= String.valueOf(AVL.class.getName());
         }else if(tree==2){
-            treeType= String.valueOf(SPLAYTree.class);
+            treeType= String.valueOf(SPLAYTree.class.getName());
             order=grade;
         }else{
-            treeType= String.valueOf(Btree.class);
+            treeType= String.valueOf(Btree.class.getName());
         }
         deep=deeper;
         timeleft=2000;
