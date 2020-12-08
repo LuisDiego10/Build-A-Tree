@@ -254,11 +254,14 @@ def main_menu():
 
 
 # Method for the window of the end game
-def finish_game():
+def finish_game(player1, player2):
     while True:
         win.fill((0, 0, 0))
-        draw_text("The winner is: Player 1", font, (255, 255, 255), win, 250, 20)
-        draw_text("Score: 2000", font, (255, 255, 255), win, 450, 100)
+        if player1.life_count > player2.life_count:
+            draw_text("The winner is: Player 1", font, (255, 255, 255), win, 250, 20)
+        # draw_text("Score: 2000", font, (255, 255, 255), win, 450, 100)
+        if player2.life_count > player1.life_count:
+            draw_text("The winner is: Player 2", font, (255, 255, 255), win, 250, 20)
         click = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -486,7 +489,6 @@ def game():
         all_sprite_list.update()
         levelact.update()
 
-        # Logic for the lives
         if player1.rect.right > width_win:
             player1.rect.right = width_win
         if player1.rect.left < 0:
@@ -497,15 +499,22 @@ def game():
         if player2.rect.left < 0:
             player2.rect.left = 0
 
+        # Logic for the lives
         if player1.rect.y > 800 and player1.life_count >= 1:
             player1.rect.y = 320
             player1.rect.x = 520
             player1.life_count -= 1
 
+        if player1.life_count <= 0:
+            done = True
+
         if player2.rect.y > 800 and player2.life_count >= 1:
             player2.rect.y = 320
             player2.rect.x = 520
             player2.life_count -= 1
+
+        if player2.life_count <= 0:
+            done = True
 
         # When AirJump is activated
         if player2.rect.y >= 750 and player2.airjump == True:
@@ -544,6 +553,9 @@ def game():
         win.blit(contador, (10, 10))
         pygame.display.flip()
         pygame.display.update()
+
+    else:
+        finish_game(player1, player2)
 
     pygame.quit()
 
