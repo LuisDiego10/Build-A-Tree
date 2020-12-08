@@ -162,7 +162,9 @@ public class TestGrafics extends Thread{
             auxAddBTreeDisplay4(((Btree)playertree).root);
         }
     }
-    public static void 
+    public static void createBNode(BTreeNode node){
+
+    }
 
     public static void auxAddBTreeDisplay2(BTreeNode playertree){
 
