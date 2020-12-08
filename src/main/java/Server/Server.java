@@ -34,15 +34,17 @@ public class Server {
     static BST playerTwoTree;
     static BST playerThreeTree;
     static BST playerfourthTree;
+    static int playerOnePoints;
+    static int playerTwoPoints;
+    static int playerThreePoints;
+    static int playerfourthPoints;
     static Token[] tokens= new Token[5];
     static Challenge actualChallenge;
     public static SocketServer serverSocket ;
-    public static TestGrafics grafics= new TestGrafics();
 
 
     public static void main(String[] args) throws IOException {
         serverSocket = new SocketServer();
-        grafics= new TestGrafics();
         System.out.print("asd");
         randomChallenge();
         for (int i = 0; i < 5; i++) {
@@ -111,7 +113,9 @@ public class Server {
                 playerOneTree=checkTree(playerOneTree,token);
                 try{
                 if (playerOneTree!=null){
+                    TestGrafics grafics= new TestGrafics();
                     grafics.playerTree=playerOneTree;
+                    grafics.points=playerOnePoints;
                     grafics.player ="playerOneTree";
                     grafics.start();
 
@@ -123,7 +127,9 @@ public class Server {
                 playerTwoTree=checkTree(playerTwoTree,token);
                 try {
                     if (playerTwoTree != null) {
+                        TestGrafics grafics= new TestGrafics();
                         grafics.playerTree = playerTwoTree;
+                        grafics.points=playerTwoPoints;
                         grafics.player = "playerTwoTree";
                         grafics.start();
                     }
@@ -135,7 +141,9 @@ public class Server {
                 playerThreeTree=checkTree(playerThreeTree,token);
                 try {
                     if (playerThreeTree != null) {
+                        TestGrafics grafics= new TestGrafics();
                         grafics.playerTree = playerThreeTree;
+                        grafics.points=playerThreePoints;
                         grafics.player = "playerThreeTree";
                         grafics.start();
                     }
@@ -147,7 +155,9 @@ public class Server {
                 playerfourthTree=checkTree(playerfourthTree,token);
                 try {
                     if (playerfourthTree != null) {
+                        TestGrafics grafics= new TestGrafics();
                         grafics.playerTree = playerfourthTree;
+                        grafics.points=playerfourthPoints;
                         grafics.player = "playerFourthTree";
                         grafics.start();
                     }

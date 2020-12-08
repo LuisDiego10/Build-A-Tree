@@ -28,6 +28,7 @@ public class TestGrafics extends Thread{
     private static Logger logger = LogManager.getLogger("Server");
     public BST playerTree;
     public String player;
+    public int points;
     public MutableGraph gr;
     public Graph ga;
 
@@ -80,7 +81,7 @@ public class TestGrafics extends Thread{
                     .graphAttr().with(Rank.dir(TOP_TO_BOTTOM))
                     .nodeAttr().with(Font.name("Arial"))
                     .linkAttr().with("class", "link-class")
-                    .with(sortTree(playerTree)
+                    .with(sortTree(playerTree),node(playerTree.getClass().getSimpleName()),node(String.valueOf((points)+" points"))
                     );
             try {
                 Graphviz.fromGraph(ga).height(150).render(Format.PNG).toFile(new File("src/main/python/Interface/" + player + ".png"));
