@@ -11,7 +11,7 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 
 height_win = 800
-width_win = 1200
+width_win = 1500
 
 
 # Class that creates the Tokens
@@ -110,10 +110,10 @@ class Player(pygame.sprite.Sprite):
 
     # Method for the movement of the players
     def left(self):
-        self.change_x = -6
+        self.change_x += -6
 
     def right(self):
-        self.change_x = 6
+        self.change_x += 6
 
     def stop(self):
         self.change_x = 0
@@ -141,7 +141,7 @@ class Level(object):
 
     def draw(self, win):
         background = pygame.image.load("backgound.jpg")
-        win.blit(background, [0, 0])
+        win.blit(background, [-700, 0])
         self.platform_list.draw(win)
 
 
@@ -445,11 +445,11 @@ def game():
 
         # Limits when the players are moving
         if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT and player1.change_x < 0:
+            if event.key == pygame.K_LEFT and player1.change_x < 1200:
                 player1.stop()
             if event.key == pygame.K_RIGHT and player1.change_x > 0:
                 player1.stop()
-            if event.key == pygame.K_a and player2.change_x < 0:
+            if event.key == pygame.K_a and player2.change_x < 1200:
                 player2.stop()
             if event.key == pygame.K_d and player2.change_x > 0:
                 player2.stop()
@@ -505,7 +505,7 @@ def game():
             player1.life_count -= 1
 
         if player1.life_count <= 0:
-            done = True
+            finish_game(player1, player2)
 
         if player2.rect.y > 800 and player2.life_count >= 1:
             player2.rect.y = 320
@@ -513,7 +513,7 @@ def game():
             player2.life_count -= 1
 
         if player2.life_count <= 0:
-            done = True
+            finish_game(player1, player2)
 
         # When AirJump is activated
         if player2.rect.y >= 750 and player2.airjump == True:
@@ -543,7 +543,7 @@ def game():
             aux += 1
             print(time1)
         contador = font.render("Tiempo : " + str(time1), 0, (20, 20, 0))
-        challenge_tittle= font.render( "El reto a cumplir es: " + challenge.treeType, 0, (20, 20, 0))
+        challenge_tittle = font.render("El reto a cumplir es: " + challenge.treeType, 0, (20, 40, 0))
 
         # Finals method called
         levelact.draw(win)
@@ -551,12 +551,11 @@ def game():
         tokens_list.draw(win)
         clock.tick(60)
         win.blit(contador, (1, 1))
-        win.blit(challenge_tittle, (1, 1))
+        win.blit(challenge_tittle, (1, 50))
         pygame.display.flip()
         pygame.display.update()
 
-    else:
-        finish_game(player1, player2)
+
 
     pygame.quit()
 
