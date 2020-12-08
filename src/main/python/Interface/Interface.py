@@ -35,7 +35,8 @@ class Powers(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load("force-push.png")
         self.rect = self.image.get_rect()
-        self.rect.x =random.randrange(600)
+        self.rect.x = random.randrange(600)
+        self.rect.y = 801
 
     def update(self):
         self.rect.y += 1
@@ -267,7 +268,6 @@ def finish_game():
         pygame.display.update()
 
 def game():
-    running = True
     pygame.init()
     dimentions = [width_win, height_win]
     win = pygame.display.set_mode(dimentions)
@@ -347,26 +347,32 @@ def game():
                 if pygame.sprite.collide_rect(player1,force_push):
                     player1.forcepush=True
                     force_push.remove(all_sprite_list)
+                    pygame.display.update()
 
                 if pygame.sprite.collide_rect(player2,force_push):
                     player2.forcepush=True
                     force_push.remove(all_sprite_list)
+                    pygame.display.update()
 
                 if pygame.sprite.collide_rect(player1,air_jump):
                     player1.airjump=True
                     air_jump.remove(all_sprite_list)
+                    pygame.display.update()
 
                 if pygame.sprite.collide_rect(player2,air_jump):
                     player2.airjump=True
                     air_jump.remove(all_sprite_list)
+                    pygame.display.update()
 
                 if pygame.sprite.collide_rect(player1,shield):
                     player1.shield=True
                     shield.remove(all_sprite_list)
+                    pygame.display.update()
 
                 if pygame.sprite.collide_rect(player2,shield):
                     player2.shield=True
                     shield.remove(all_sprite_list)
+                    pygame.display.update()
 
 
                 if event.key == pygame.K_e and player1.normalhit == True and pygame.sprite.collide_rect(player1,
@@ -484,21 +490,23 @@ def game():
         #AirJump
         if player2.rect.y >= 750 and player2.airjump == True:
             player2.jump2()
-            player2.airjump == False
+            player2.airjump = False
 
         if player1.rect.y >= 750 and player1.airjump == True:
             player1.jump2()
-            player1.airjump==False
+            player1.airjump=False
 
         if player1.shield == True:
-            player2.normalhit = False
-            player2.forcepush = False
-            player1.shield= False
+            if player2.forcepush==True:
+                player2.forcepush=False
+            player1.shield=False
+            player2.normalhit= True
 
         if player2.shield == True:
-            player1.normalhit = False
-            player1.forcepush = False
+            if player1.forcepush==True:
+                player1.forcepush=False
             player2.shield= False
+            player1.normalhit=True
         aux=1
         time1= pygame.time.get_ticks()/1000
         if aux == time1:
