@@ -99,7 +99,21 @@ public class BST {
 
     public void insertB(int item) {
     }
-}
+    public int maxDepth(NodeBST node){
+        if (node == null){
+            return 0;}
+        else
+        {
+            int lDepth = maxDepth(node.left);
+            int rDepth = maxDepth(node.right);
+
+            if (lDepth > rDepth)
+                return (lDepth + 1);
+            else
+                return (rDepth + 1);
+        }
+
+    }
 /**
  * Main Class
  * Contain the instance for run Tree
@@ -107,7 +121,7 @@ public class BST {
  * @version 1.0
  * @since 21/11/2020
  */
-class Main{
+static class Main{
     public static void main (String [] args){
         BST firtsBST=new BST();
         firtsBST.insert(45);
@@ -121,4 +135,5 @@ class Main{
         System.out.println(returnTF);
         System.out.println("END");
     }
+}
 }

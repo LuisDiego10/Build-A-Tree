@@ -112,6 +112,10 @@ public class Server {
         switch (token.player){
             case 1:
                 playerOneTree=checkTree(playerOneTree,token);
+                if(actualChallenge.deep==playerOneTree.maxDepth(playerOneTree.root)){
+                    playerOnePoints=+actualChallenge.reward;
+                    randomChallenge();
+                }
                 try{
                 if (playerOneTree!=null){
                     TestGrafics grafics= new TestGrafics();
@@ -126,6 +130,10 @@ public class Server {
                 break;
             case 2:
                 playerTwoTree=checkTree(playerTwoTree,token);
+                if(actualChallenge.deep==playerTwoTree.maxDepth(playerTwoTree.root)){
+                    playerTwoPoints=+actualChallenge.reward;
+                    randomChallenge();
+                }
                 try {
                     if (playerTwoTree != null) {
                         TestGrafics grafics= new TestGrafics();
@@ -140,6 +148,10 @@ public class Server {
                 break;
             case 3:
                 playerThreeTree=checkTree(playerThreeTree,token);
+                if(actualChallenge.deep==playerThreeTree.maxDepth(playerThreeTree.root)){
+                    playerThreePoints=+actualChallenge.reward;
+                    randomChallenge();
+                }
                 try {
                     if (playerThreeTree != null) {
                         TestGrafics grafics= new TestGrafics();
@@ -154,6 +166,10 @@ public class Server {
                 break;
             case 4:
                 playerfourthTree=checkTree(playerfourthTree,token);
+                if(actualChallenge.deep==playerfourthTree.maxDepth(playerfourthTree.root)){
+                    playerfourthPoints=+actualChallenge.reward;
+                    randomChallenge();
+                }
                 try {
                     if (playerfourthTree != null) {
                         TestGrafics grafics= new TestGrafics();
@@ -173,12 +189,14 @@ public class Server {
             if (playerTree.getClass().getName().equals(token.type)) {
                 if(playerTree.getClass()==BST.class){
                     playerTree.insert(token.value);
+
                 }else if(playerTree.getClass()== Btree.class){
                     playerTree.insert(token.value);
                 }else if(playerTree.getClass()== AVL.class){
                     playerTree.insertAVL(token.value);
                 }else{
                     playerTree.insertSplay(token.value);
+
                 }
 
             }else{
