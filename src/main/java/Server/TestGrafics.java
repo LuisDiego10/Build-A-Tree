@@ -26,10 +26,10 @@ import java.io.IOException;
 
 public class TestGrafics extends Thread{
     private static Logger logger = LogManager.getLogger("Server");
-    public static BST playerTree;
-    public static String player;
-    public static MutableGraph gr;
-    public static Graph ga;
+    public BST playerTree;
+    public String player;
+    public MutableGraph gr;
+    public Graph ga;
 
     public static void main(String[] args) throws IOException {
 
@@ -71,9 +71,10 @@ public class TestGrafics extends Thread{
     @Override
     public void run() {
         displayTree(playerTree,player);
+        System.out.print("player"+playerTree.toString());
     }
 
-    public static void displayTree(BST playerTree, String player){
+    public void displayTree(BST playerTree, String player){
         if(playerTree.getClass()!=Btree.class) {
             ga = graph("example1").directed()
                     .graphAttr().with(Rank.dir(TOP_TO_BOTTOM))
@@ -140,7 +141,7 @@ public class TestGrafics extends Thread{
     }
 
 
-    public static void displayBtree(BST playerTree,String player){
+    public void displayBtree(BST playerTree, String player){
         gr = mutGraph("example1").setDirected(true);
         addBTreeDisplay(playerTree);
         try {
@@ -161,6 +162,7 @@ public class TestGrafics extends Thread{
             auxAddBTreeDisplay4(((Btree)playertree).root);
         }
     }
+    public static void 
 
     public static void auxAddBTreeDisplay2(BTreeNode playertree){
 
