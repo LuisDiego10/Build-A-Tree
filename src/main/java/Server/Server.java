@@ -62,7 +62,8 @@ public class Server {
 
             if(actualChallenge.timeleft<0){
                 randomChallenge();
-                System.out.print("\n  ");
+                System.out.print("\n a ");
+                serverSocket.sendMsg(Factory.Serializer(actualChallenge));
             }
             try {
                 Thread.sleep(15);

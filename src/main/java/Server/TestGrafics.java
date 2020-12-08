@@ -13,7 +13,6 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.Graph;
 import guru.nidi.graphviz.model.MutableGraph;
-import guru.nidi.graphviz.model.MutableNode;
 import guru.nidi.graphviz.model.Node;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,39 +32,21 @@ public class TestGrafics extends Thread{
     public Graph ga;
 
     public static void main(String[] args) throws IOException {
+        Btree b = new Btree(2);
+        b.insert(10);
+        b.insert(20);
+        b.insert(5);
+        b.insert(6);
+        b.insert(12);
+        b.insert(30);
+        b.insert(7);
+        b.insert(17);
+        TestGrafics g= new TestGrafics();
+        g.playerTree=b;
+        g.player="isriom";
+        g.displayTree(b,"isriom");
 
-        Node node0 = node("node0").with(Records.of(rec("f0", ""), rec("f1", "a"), rec("f2", "b"), rec("f3", "c"), rec("f4", "")));
-        Node node1 = node("node1").with(Records.of(rec("asd"), rec("v", "719"), rec("")));
-        Node node2 = node("node2").with(Records.of(rec("a1"), rec("805"), rec("p", "")));
-        Node node3 = node("node3").with(Records.of(rec("i9"), rec("718"), rec("")));
-        Node node4 = node("node4").with(Records.of(rec("e5"), rec("989"), rec("p", "")));
-        Node node5 = node("node5").with(Records.of(rec("t2"), rec("v", "959"), rec("")));
-        Node node6 = node("node6").with(Records.of(rec("o1"), rec("794"), rec("")));
-        Node node7 = node("node7").with(Records.of("s7", "659", ""));
-        System.out.print(node0.link(
-                between(port("f0"), node1.port("v", SOUTH)),
-                between(port("f1"), node2.port(WEST)),
-                between(port("f2"), node3.port(WEST)),
-                between(port("f3"), node4.port(WEST)),
-                between(port("f4"), node5.port("v", NORTH))));
-        MutableGraph g = mutGraph("example1").setDirected(true).add(
 
-                        node0.link(
-                                between(port("f0"), node1.port("v", SOUTH)),
-                                between(port("f1"), node2.port(WEST)),
-                                between(port("f2"), node3.port(WEST))),
-                        node0.link(
-                        between(port("f3"), node4.port(WEST)),
-                        between(port("f4"), node5.port("v", NORTH))));
-
-                g.add(
-                        node2.link(between(port("p"), node6.port(NORTH_WEST))),
-                        node4.link(between(port("p"), node7.port(SOUTH_WEST))));
-        try {
-            Graphviz.fromGraph(g).width(900).render(Format.PNG).toFile(new File("example/ex3.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -153,9 +134,10 @@ public class TestGrafics extends Thread{
 
     }
 
-    public static void addBTreeDisplay(BST playertree){
+    public void addBTreeDisplay(BST playertree){
         if(((Btree)playertree).t==2){
-            auxAddBTreeDisplay2(((Btree)playertree).root);
+            createBNode(((Btree)playertree).root);
+
         }else if(((Btree)playertree).t==3){
             auxAddBTreeDisplay3(((Btree)playertree).root);
         }
@@ -163,7 +145,51 @@ public class TestGrafics extends Thread{
             auxAddBTreeDisplay4(((Btree)playertree).root);
         }
     }
-    public static void createBNode(BTreeNode node){
+    public Node createBNode(BTreeNode node){
+        String a="";
+        String c="";
+        String b="";
+        try{
+            switch (node.n) {
+                case 0:
+                    break;
+                case 1:
+                    a = String.valueOf(node.keys[0]);
+                    break;
+                case 2:
+                    a = String.valueOf(node.keys[0]);
+                    b = String.valueOf(node.keys[1]);
+                    break;
+                case 3:
+                    a = String.valueOf(node.keys[0]);
+                    b = String.valueOf(node.keys[1]);
+                    c = String.valueOf(node.keys[2]);
+                    break;
+            }
+        } catch (Exception e) {
+            logger.warn("keys not full or unknown error:"+e);
+        }
+        Node node0 = node("node0").with(Records.of(rec("f0", ""), rec("f1", a),
+                rec("f2", ""), rec("f3", b), rec("f4", ""),rec("f5", c),
+                rec("f6", "")));
+        gr.add(node0);
+        if(node.leaf){
+            return node0;
+        }
+        if(node.C[0]!=null){
+            gr.add(node0.link(between(port("f0"), createBNode(node.C[0]).port(NORTH))));
+        }
+        if(node.C[1]!=null){
+            gr.add(node0.link(between(port("f2"), createBNode(node.C[1]).port(NORTH))));
+        }
+        if(node.C[2]!=null){
+            gr.add(node0.link(between(port("f4"), createBNode(node.C[2]).port(NORTH))));
+        }
+        if(node.C[3]!=null){
+            gr.add(node0.link(between(port("f6"), createBNode(node.C[3]).port(NORTH))));
+        }
+
+        return node0;
 
     }
 
