@@ -37,12 +37,12 @@ public class Server {
     static Token[] tokens= new Token[5];
     static Challenge actualChallenge;
     public static SocketServer serverSocket ;
-    public static TestGrafics grafics;
+    public static TestGrafics grafics= new TestGrafics();
 
 
     public static void main(String[] args) throws IOException {
         serverSocket = new SocketServer();
-
+        grafics= new TestGrafics();
         System.out.print("asd");
         randomChallenge();
         for (int i = 0; i < 5; i++) {
@@ -111,48 +111,48 @@ public class Server {
                 playerOneTree=checkTree(playerOneTree,token);
                 try{
                 if (playerOneTree!=null){
-                    TestGrafics.playerTree=playerOneTree;
-                    TestGrafics.player ="playerOneTree";
+                    grafics.playerTree=playerOneTree;
+                    grafics.player ="playerOneTree";
                     grafics.start();
 
                 }} catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error calling the grapich function"+e);
                 }
                 break;
             case 2:
                 playerTwoTree=checkTree(playerTwoTree,token);
                 try {
                     if (playerTwoTree != null) {
-                        TestGrafics.playerTree = playerTwoTree;
-                        TestGrafics.player = "playerTwoTree";
+                        grafics.playerTree = playerTwoTree;
+                        grafics.player = "playerTwoTree";
                         grafics.start();
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error calling the grapich function"+e);
                 }
                 break;
             case 3:
                 playerThreeTree=checkTree(playerThreeTree,token);
                 try {
                     if (playerThreeTree != null) {
-                        TestGrafics.playerTree = playerThreeTree;
-                        TestGrafics.player = "playerThreeTree";
+                        grafics.playerTree = playerThreeTree;
+                        grafics.player = "playerThreeTree";
                         grafics.start();
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error calling the grapich function"+e);
                 }
                 break;
             case 4:
                 playerfourthTree=checkTree(playerfourthTree,token);
                 try {
                     if (playerfourthTree != null) {
-                        TestGrafics.playerTree = playerfourthTree;
-                        TestGrafics.player = "playerFourthTree";
+                        grafics.playerTree = playerfourthTree;
+                        grafics.player = "playerFourthTree";
                         grafics.start();
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error calling the grapich function"+e);
                 }
                 break;
         }
