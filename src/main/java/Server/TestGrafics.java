@@ -47,6 +47,7 @@ public class TestGrafics extends Thread{
         TestGrafics g= new TestGrafics();
         g.playerTree=b;
         g.player="isriom";
+        g.points=0;
         g.displayTree(b,"isriom");
 
     }
@@ -126,6 +127,7 @@ public class TestGrafics extends Thread{
     public void displayBtree(BST playerTree, String player){
         gr = mutGraph("example1").setDirected(true);
         addBTreeDisplay(playerTree);
+        gr.add(node(playerTree.getClass().getSimpleName()),node(String.valueOf((points)+" points")));
         try {
             Graphviz.fromGraph(gr).width(900).render(Format.PNG).toFile(new File("src/main/python/Interface/" + player + ".png"));
         } catch (IOException e) {
