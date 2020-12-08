@@ -34,15 +34,17 @@ public class Server {
     static BST playerTwoTree;
     static BST playerThreeTree;
     static BST playerfourthTree;
+    static int playerOnePoints;
+    static int playerTwoPoints;
+    static int playerThreePoints;
+    static int playerfourthPoints;
     static Token[] tokens= new Token[5];
     static Challenge actualChallenge;
     public static SocketServer serverSocket ;
-    public static TestGrafics grafics;
 
 
     public static void main(String[] args) throws IOException {
         serverSocket = new SocketServer();
-
         System.out.print("asd");
         randomChallenge();
         for (int i = 0; i < 5; i++) {
@@ -60,7 +62,8 @@ public class Server {
 
             if(actualChallenge.timeleft<0){
                 randomChallenge();
-                System.out.print("\n  ");
+                System.out.print("\n a ");
+                serverSocket.sendMsg(Factory.Serializer(actualChallenge));
             }
             try {
                 Thread.sleep(15);
@@ -111,48 +114,56 @@ public class Server {
                 playerOneTree=checkTree(playerOneTree,token);
                 try{
                 if (playerOneTree!=null){
-                    TestGrafics.playerTree=playerOneTree;
-                    TestGrafics.player ="playerOneTree";
+                    TestGrafics grafics= new TestGrafics();
+                    grafics.playerTree=playerOneTree;
+                    grafics.points=playerOnePoints;
+                    grafics.player ="playerOneTree";
                     grafics.start();
 
                 }} catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error calling the grapich function"+e);
                 }
                 break;
             case 2:
                 playerTwoTree=checkTree(playerTwoTree,token);
                 try {
                     if (playerTwoTree != null) {
-                        TestGrafics.playerTree = playerTwoTree;
-                        TestGrafics.player = "playerTwoTree";
+                        TestGrafics grafics= new TestGrafics();
+                        grafics.playerTree = playerTwoTree;
+                        grafics.points=playerTwoPoints;
+                        grafics.player = "playerTwoTree";
                         grafics.start();
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error calling the grapich function"+e);
                 }
                 break;
             case 3:
                 playerThreeTree=checkTree(playerThreeTree,token);
                 try {
                     if (playerThreeTree != null) {
-                        TestGrafics.playerTree = playerThreeTree;
-                        TestGrafics.player = "playerThreeTree";
+                        TestGrafics grafics= new TestGrafics();
+                        grafics.playerTree = playerThreeTree;
+                        grafics.points=playerThreePoints;
+                        grafics.player = "playerThreeTree";
                         grafics.start();
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error calling the grapich function"+e);
                 }
                 break;
             case 4:
                 playerfourthTree=checkTree(playerfourthTree,token);
                 try {
                     if (playerfourthTree != null) {
-                        TestGrafics.playerTree = playerfourthTree;
-                        TestGrafics.player = "playerFourthTree";
+                        TestGrafics grafics= new TestGrafics();
+                        grafics.playerTree = playerfourthTree;
+                        grafics.points=playerfourthPoints;
+                        grafics.player = "playerFourthTree";
                         grafics.start();
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error calling the grapich function"+e);
                 }
                 break;
         }
