@@ -207,6 +207,7 @@ def check_msg():
     else:
         pass
 
+
 # Sprites groups
 tokens_list = pygame.sprite.Group()
 power_list = pygame.sprite.Group()
@@ -214,12 +215,14 @@ all_sprite_list = pygame.sprite.Group()
 all_platforms_list = pygame.sprite.Group()
 check_msg()
 
+
 # Method to draw text in the interface
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
+
 
 # Method that creates the main menu
 def main_menu():
@@ -245,9 +248,10 @@ def main_menu():
         if button_start.collidepoint((mx, my)):
             if click:
                 game()
-        pygame.draw.rect(win, (RED), button_start)
+        pygame.draw.rect(win, RED, button_start)
 
         pygame.display.update()
+
 
 # Method for the window of the end game
 def finish_game():
@@ -273,9 +277,10 @@ def finish_game():
         if button_menu.collidepoint((mx, my)):
             if click:
                 main_menu()
-        pygame.draw.rect(win, (BLUE), button_menu)
+        pygame.draw.rect(win, BLUE, button_menu)
 
         pygame.display.update()
+
 
 # Method that creates the whole game
 def game():
@@ -296,8 +301,7 @@ def game():
     shield = Powers()
     shield.image = pygame.image.load("shield.png")
 
-    level_list = []
-    level_list.append(Level1(player1, player2))
+    level_list = [Level1(player1, player2)]
     levelact_no = 0
     levelact = level_list[levelact_no]
 
@@ -512,14 +516,14 @@ def game():
             player1.jump2()
             player1.airjump = False
 
-        if player1.shield == True:
-            if player2.forcepush == True:
+        if player1.shield:
+            if player2.forcepush:
                 player2.forcepush = False
             player1.shield = False
             player2.normalhit = True
 
-        if player2.shield == True:
-            if player1.forcepush == True:
+        if player2.shield:
+            if player1.forcepush:
                 player1.forcepush = False
             player2.shield = False
             player1.normalhit = True
