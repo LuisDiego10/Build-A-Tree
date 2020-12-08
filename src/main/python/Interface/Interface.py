@@ -9,9 +9,10 @@ WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
+TRANSPARENT = (0, 0, 0, 0)
 
 height_win = 800
-width_win = 1500
+width_win = 1200
 
 
 # Class that creates the Tokens
@@ -109,10 +110,10 @@ class Player(pygame.sprite.Sprite):
 
     # Method for the movement of the players
     def left(self):
-        self.change_x += -6
+        self.change_x = -6
 
     def right(self):
-        self.change_x += 6
+        self.change_x = 6
 
     def stop(self):
         self.change_x = 0
@@ -246,7 +247,7 @@ def main_menu():
         if button_start.collidepoint((mx, my)):
             if click:
                 game()
-        pygame.draw.rect(win, (RED), button_start)
+        pygame.draw.rect(win, RED, button_start)
 
         pygame.display.update()
 
@@ -278,7 +279,7 @@ def finish_game(player1, player2):
         if button_menu.collidepoint((mx, my)):
             if click:
                 main_menu()
-        pygame.draw.rect(win, (BLUE), button_menu)
+        pygame.draw.rect(win, BLUE, button_menu)
 
         pygame.display.update()
 
@@ -318,9 +319,12 @@ def game():
     # Adding the players to the list
     all_sprite_list.add(player1)
     all_sprite_list.add(player2)
+
     done = False
     clock = pygame.time.Clock()
     cycle_count = 0
+    player1_img = pygame.image.load("playerOneTree.png")
+    player2_img = pygame.image.load("playerTwoTree.png")
 
     # Cycle when the game is running
     while not done:
@@ -398,7 +402,6 @@ def game():
                     shield.remove(all_sprite_list)
                     pygame.display.update()
 
-
                 if event.key == pygame.K_o and player1.normalhit == True and pygame.sprite.collide_rect(player1,
                                                                                                         player2):
                     player2.rect.x += 40
@@ -411,54 +414,54 @@ def game():
                 # Powers
                 if event.key == pygame.K_l and player1.forcepush == True and pygame.sprite.collide_rect(player1,
                                                                                                         player2):
-                    if player2.shield==True:
-                        player1.forcepush=False
-                        player2.shield=False
+                    if player2.shield == True:
+                        player1.forcepush = False
+                        player2.shield = False
                     else:
                         player2.rect.x += 20
                         player2.rect.y -= 50
                         player2.beattacked = 40
                         all_sprite_list.draw(win)
-                        player1.forcepush=False
+                        player1.forcepush = False
                     pygame.display.update()
 
                 if event.key == pygame.K_f and player2.forcepush == True and pygame.sprite.collide_rect(player2,
                                                                                                         player1):
-                    if player1.shield==True:
-                        player2.forcepush=False
-                        player1.shield=False
+                    if player1.shield == True:
+                        player2.forcepush = False
+                        player1.shield = False
                     else:
                         player1.rect.x -= 20
                         player1.rect.y -= 50
                         player1.beattacked = -40
                         all_sprite_list.draw(win)
-                        player2.forcepush=False
+                        player2.forcepush = False
                     pygame.display.update()
 
                 if event.key == pygame.K_k and player1.forcepush == True and pygame.sprite.collide_rect(player1,
                                                                                                         player2):
-                    if player2.shield==True:
-                        player1.forcepush=False
-                        player2.shield=False
+                    if player2.shield == True:
+                        player1.forcepush = False
+                        player2.shield = False
                     else:
                         player2.rect.x -= 20
                         player2.rect.y -= 50
                         player2.beattacked = -40
                         all_sprite_list.draw(win)
-                        player1.forcepush=False
+                        player1.forcepush = False
                     pygame.display.update()
 
                 if event.key == pygame.K_g and player2.forcepush == True and pygame.sprite.collide_rect(player2,
                                                                                                         player1):
-                    if player1.shield==True:
-                        player2.forcepush=False
-                        player1.shield=False
+                    if player1.shield == True:
+                        player2.forcepush = False
+                        player1.shield = False
                     else:
                         player1.rect.x += 20
                         player1.rect.y -= 50
                         player1.beattacked = 40
                         all_sprite_list.draw(win)
-                        player2.forcepush=False
+                        player2.forcepush = False
                     pygame.display.update()
 
         # Limits when the players are moving
@@ -496,12 +499,20 @@ def game():
             x.token.player = 1
             socket.send_msg(x.token.__dict__)
             socket.tokens.remove(x.token)
+            player1_img.fill(TRANSPARENT)
+            player1_img = pygame.image.load("playerOneTree.png")
+            win.blit(player1_img, [1, 1])
+            pygame.display.update()
         tokens_hit_list = None
         tokens_hit_list = pygame.sprite.spritecollide(player2, tokens_list, True)
         for x in tokens_hit_list:
             x.token.player = 2
             socket.send_msg(x.token.__dict__)
             socket.tokens.remove(x.token)
+            player2_img.fill(TRANSPARENT)
+            player2_img = pygame.image.load("playerTwoTree.png")
+            win.blit(player2_img, [100, 200])
+            pygame.display.update()
 
         all_sprite_list.update()
         levelact.update()
@@ -540,9 +551,9 @@ def game():
 
         if player1.rect.y >= 750 and player1.airjump == True:
             player1.jump2()
-            player1.airjump=False
-        aux=1
-        time1= pygame.time.get_ticks()/1000
+            player1.airjump = False
+        aux = 1
+        time1 = pygame.time.get_ticks() / 1000
         if aux == time1:
             aux += 1
             print(time1)
@@ -556,10 +567,10 @@ def game():
         clock.tick(60)
         win.blit(contador, (1, 1))
         win.blit(challenge_tittle, (1, 50))
+        win.blit(player1_img, [0, 1])
+        win.blit(player2_img, [100, 200])
         pygame.display.flip()
         pygame.display.update()
-
-
 
     pygame.quit()
 
