@@ -413,7 +413,7 @@ def game():
                                                                                                         player2):
                     if player2.shield==True:
                         player1.forcepush=False
-                        player2.shield==False
+                        player2.shield=False
                     else:
                         player2.rect.x += 20
                         player2.rect.y -= 50
@@ -426,7 +426,7 @@ def game():
                                                                                                         player1):
                     if player1.shield==True:
                         player2.forcepush=False
-                        player1.shield==False
+                        player1.shield=False
                     else:
                         player1.rect.x -= 20
                         player1.rect.y -= 50
@@ -439,7 +439,7 @@ def game():
                                                                                                         player2):
                     if player2.shield==True:
                         player1.forcepush=False
-                        player2.shield==False
+                        player2.shield=False
                     else:
                         player2.rect.x -= 20
                         player2.rect.y -= 50
@@ -452,7 +452,7 @@ def game():
                                                                                                         player1):
                     if player1.shield==True:
                         player2.forcepush=False
-                        player1.shield==False
+                        player1.shield=False
                     else:
                         player1.rect.x += 20
                         player1.rect.y -= 50
