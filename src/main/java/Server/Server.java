@@ -42,11 +42,9 @@ public class Server {
     static Challenge actualChallenge;
     public static SocketServer serverSocket ;
 
-
     public static void main(String[] args) throws IOException {
         serverSocket = new SocketServer();
-        System.out.print("asd");
-        randomChallenge();
+        randomChallenge(false);
         for (int i = 0; i < 5; i++) {
             tokens[i]= newToken();
             serverSocket.sendMsg(Factory.Serializer(tokens[i]));
@@ -61,8 +59,7 @@ public class Server {
         while (running){
 
             if(actualChallenge.timeleft<0){
-                randomChallenge();
-                System.out.print("\n a ");
+                randomChallenge(true);
                 serverSocket.sendMsg(Factory.Serializer(actualChallenge));
             }
             try {
@@ -80,27 +77,94 @@ public class Server {
             }
         }
     }
-
-
-    public static void randomChallenge(){
+    public static void randomChallenge(boolean flag){
+        if(flag){
+            BST[] trees={playerOneTree,playerTwoTree,playerThreeTree,playerfourthTree};
+            int[] puntajes={playerOnePoints,playerTwoPoints,playerThreePoints,playerfourthPoints};
+            int goal=0;
+            for(int x=0;x<3;x++){
+                if (trees[x]!=null&&trees[x+1]!=null){
+                    if (trees[x].getClass()==Btree.class){
+                        if(trees[x+1].getClass()==Btree.class) {
+                            if (((Btree) trees[x + 1]).root.n >= ((Btree) trees[x]).root.n) {
+                                goal = x + 1;
+                            }
+                        }
+                        else if(trees[x+1].getClass()==AVL.class){
+                            if (((AVL)trees[x+1]).root.height >= ((Btree)trees[x]).root.n) {
+                                goal=x+1;
+                            }
+                        }
+                        else{
+                            if ((trees[x+1].maxDepth(trees[x+1].root) >= ((Btree)trees[x]).root.n)) {
+                                goal=x+1;
+                            }
+                        }
+                    }
+                    else if(trees[x].getClass()==AVL.class){
+                        if(trees[x+1].getClass()==Btree.class) {
+                            if (((Btree) trees[x + 1]).root.n >= ((AVL) trees[x]).root.height) {
+                                goal = x + 1;
+                            }
+                        }
+                        else if(trees[x+1].getClass()==AVL.class){
+                            if (((AVL)trees[x+1]).root.height >= ((AVL)trees[x]).root.height) {
+                                goal=x+1;
+                            }
+                        }
+                        else{
+                            if ((trees[x+1].maxDepth(trees[x+1].root) >= ((AVL)trees[x]).root.height)) {
+                                goal=x+1;
+                            }
+                        }
+                    }
+                    else {
+                        if(trees[x+1].getClass()==Btree.class) {
+                            if (((Btree) trees[x + 1]).root.n >= (trees[x].maxDepth(trees[x].root))) {
+                                goal = x + 1;
+                            }
+                        }
+                        else if(trees[x+1].getClass()==AVL.class){
+                            if (((AVL)trees[x+1]).root.height >= (trees[x].maxDepth(trees[x].root))) {
+                                goal=x+1;
+                            }
+                        }
+                        else{
+                            if ((trees[x+1].maxDepth(trees[x+1].root) >= (trees[x].maxDepth(trees[x].root)))) {
+                                goal=x+1;
+                            }
+                        }
+                    }
+                }
+            }
+            if(goal==0){
+                playerOnePoints+=actualChallenge.reward;
+            }else if (goal==1){
+                playerTwoPoints+=actualChallenge.reward;
+            }else if(goal==2){
+                playerThreePoints+=actualChallenge.reward;
+            }else{
+                playerfourthPoints+=actualChallenge.reward;
+            }
+        }
         Random randomizer= new Random();
         actualChallenge= new Challenge(randomizer.nextInt(5),randomizer.nextInt(4),randomizer.nextInt(3)+3);
     }
     public static Token newToken(){
         Random randomizer= new Random();
         String type="";
-        switch(randomizer.nextInt(3)+1){
+        switch(randomizer.nextInt(4)+1){
             case 1:
-                type= String.valueOf(BST.class.getName());
+                type= String.valueOf(BST.class.getSimpleName());
                 break;
             case 2:
-                type= String.valueOf(AVL.class.getName());
+                type= String.valueOf(AVL.class.getSimpleName());
                 break;
             case 3:
-                type= String.valueOf(SPLAYTree.class.getName());
+                type= String.valueOf(SPLAYTree.class.getSimpleName());
                 break;
             case 4:
-                type= String.valueOf(Btree.class.getName());
+                type= String.valueOf(Btree.class.getSimpleName());
                 break;
         }
         Token newToken=new Token();
@@ -117,17 +181,18 @@ public class Server {
                     if (playerOneTree.getClass()==Btree.class){
                         if (actualChallenge.deep == ((Btree)playerOneTree).root.n & !((Btree)playerOneTree).root.leaf ) {
                             playerOnePoints = +actualChallenge.reward;
-                            randomChallenge();
+                            randomChallenge(false);
+
                         }
                     }else if(playerOneTree.getClass()==AVL.class){
                         if (actualChallenge.deep == ((AVL)playerOneTree).root.height) {
                             playerOnePoints = +actualChallenge.reward;
-                            randomChallenge();
+                            randomChallenge(false);
                         }
                     }else {
                         if (actualChallenge.deep == playerOneTree.maxDepth(playerOneTree.root)) {
                             playerOnePoints = +actualChallenge.reward;
-                            randomChallenge();
+                            randomChallenge(false);
                         }
                     }
                     TestGrafics grafics= new TestGrafics();
@@ -148,17 +213,17 @@ public class Server {
                         if (playerTwoTree.getClass()==Btree.class){
                             if (actualChallenge.deep == ((Btree)playerTwoTree).root.n & !((Btree)playerTwoTree).root.leaf ) {
                                 playerTwoPoints = +actualChallenge.reward;
-                                randomChallenge();
+                                randomChallenge(false);
                             }
                         }else if(playerThreeTree.getClass()==AVL.class){
                             if (actualChallenge.deep == ((AVL)playerTwoTree).root.height) {
                                 playerTwoPoints = +actualChallenge.reward;
-                                randomChallenge();
+                                randomChallenge(false);
                             }
                         }else {
                             if (actualChallenge.deep == playerTwoTree.maxDepth(playerTwoTree.root)) {
                                 playerTwoPoints = +actualChallenge.reward;
-                                randomChallenge();
+                                randomChallenge(false);
                             }
                         }
                         TestGrafics grafics= new TestGrafics();
@@ -179,18 +244,18 @@ public class Server {
                         if (playerThreeTree.getClass()==Btree.class){
                             if (actualChallenge.deep == ((Btree)playerThreeTree).root.n & !((Btree)playerThreeTree).root.leaf ) {
                                 playerThreePoints = +actualChallenge.reward;
-                                randomChallenge();
+                                randomChallenge(false);
                             }
                         }else if(playerThreeTree.getClass()==AVL.class){
                             if (actualChallenge.deep == ((AVL)playerThreeTree).root.height) {
                                 playerThreePoints = +actualChallenge.reward;
-                                randomChallenge();
+                                randomChallenge(false);
                             }
                         }else {
 
                             if (actualChallenge.deep == playerThreeTree.maxDepth(playerThreeTree.root)) {
                                 playerThreePoints = +actualChallenge.reward;
-                                randomChallenge();
+                                randomChallenge(false);
                             }
                         }
                         TestGrafics grafics= new TestGrafics();
@@ -211,17 +276,17 @@ public class Server {
                         if (playerfourthTree.getClass()==Btree.class){
                             if (actualChallenge.deep == ((Btree)playerfourthTree).root.n & !((Btree)playerfourthTree).root.leaf ) {
                                 playerfourthPoints = +actualChallenge.reward;
-                                randomChallenge();
+                                randomChallenge(false);
                             }
                         }else if(playerfourthTree.getClass()==AVL.class){
                             if (actualChallenge.deep == ((AVL)playerfourthTree).root.height) {
                                 playerfourthPoints = +actualChallenge.reward;
-                                randomChallenge();
+                                randomChallenge(false);
                             }
                         }else {
                             if (actualChallenge.deep == playerfourthTree.maxDepth(playerfourthTree.root)) {
                                 playerfourthPoints = +actualChallenge.reward;
-                                randomChallenge();
+                                randomChallenge(false);
                             }
                         }
                         TestGrafics grafics= new TestGrafics();
@@ -238,12 +303,12 @@ public class Server {
     }
     public static BST checkTree(BST playerTree, Token token){
         if (playerTree != null){
-            if (playerTree.getClass().getName().equals(token.type)) {
+            if (playerTree.getClass().getSimpleName().equals(token.type)) {
                 if(playerTree.getClass()==BST.class){
                     playerTree.insert(token.value);
 
                 }else if(playerTree.getClass()== Btree.class){
-                    playerTree.insert(token.value);
+                    playerTree.insertB(token.value);
                 }else if(playerTree.getClass()== AVL.class){
                     playerTree.insertAVL(token.value);
                 }else{
@@ -255,12 +320,13 @@ public class Server {
                 playerTree=null;
             }
         }else{
-            if(token.type.equals(BST.class.getName())){
+            if(token.type.equals(BST.class.getSimpleName())){
                 playerTree=new BST();
                 playerTree.insert(token.value);
-            }else if(token.type.equals(Btree.class.getName())){
-                playerTree=new Btree(token.value);
-            }else if(token.type.equals(AVL.class.getName())){
+            }else if(token.type.equals(Btree.class.getSimpleName())){
+                playerTree=new Btree(2);
+                playerTree.insertB(token.value);
+            }else if(token.type.equals(AVL.class.getSimpleName())){
                 playerTree=new AVL();
                 playerTree.insertAVL(token.value);
             }else{

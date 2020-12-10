@@ -189,13 +189,13 @@ def check_msg():
         if create:
             figure = Tokens()
             figure.token = x
-            if x.tree_type == "BST.BST":
+            if x.tree_type == "BST":
                 figure.image = pygame.image.load("rombo.png")
-            if x.tree_type == "SPLAY.SPLAYTree":
+            if x.tree_type == "SPLAYTree":
                 figure.image = pygame.image.load("triangulo.png")
-            if x.tree_type == "BTree.Btree":
+            if x.tree_type == "Btree":
                 figure.image = pygame.image.load("cuadrado.png")
-            if x.tree_type == "AVL.AVL":
+            if x.tree_type == "AVL":
                 figure.image = pygame.image.load("circulo.png")
             figure.rect.x = random.randrange(900)
             figure.rect.y = random.randrange(600)
