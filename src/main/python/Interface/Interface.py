@@ -2,7 +2,6 @@ import pygame
 import random
 import time
 import Socket
-import threading
 
 # Constants
 BLACK = (0, 0, 0)
@@ -283,10 +282,6 @@ def finish_game(player1, player2):
         pygame.draw.rect(win, BLUE, button_menu)
 
         pygame.display.update()
-def tree_image():
-    player1_img = pygame.image.load("playerOneTree.png")
-    player1_img = pygame.transform.scale(player1_img, [400, 100])
-    win.blit(player1_img, [1, 100])
 
 
 # Method that creates the whole game
@@ -536,8 +531,11 @@ def game():
             x.token.player = 1
             socket.send_msg(x.token.__dict__)
             socket.tokens.remove(x.token)
-        playertree = threading.Thread(target=tree_image)
-        playertree.start()
+            player1_img.fill(TRANSPARENT)
+            player1_img = pygame.image.load("playerOneTree.png").convert()
+            player1_img.set_colorkey(WHITE)
+            player1_img = pygame.transform.scale(player1_img, [400, 100])
+        win.blit(player1_img, [1, 100])
         pygame.display.update()
         tokens_hit_list = None
         tokens_hit_list = pygame.sprite.spritecollide(player2, tokens_list, True)
@@ -546,7 +544,8 @@ def game():
             socket.send_msg(x.token.__dict__)
             socket.tokens.remove(x.token)
             player2_img.fill(TRANSPARENT)
-            player2_img = pygame.image.load("playerTwoTree.png")
+            player2_img = pygame.image.load("playerTwoTree.png").convert()
+            player2_img.set_colorkey(WHITE)
             player2_img = pygame.transform.scale(player2_img, [400, 100])
         win.blit(player2_img, [800, 100])
         pygame.display.update()
