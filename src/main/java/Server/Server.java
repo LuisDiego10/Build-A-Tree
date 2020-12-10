@@ -112,30 +112,55 @@ public class Server {
         switch (token.player){
             case 1:
                 playerOneTree=checkTree(playerOneTree,token);
-                if(actualChallenge.deep==playerOneTree.maxDepth(playerOneTree.root)){
-                    playerOnePoints=+actualChallenge.reward;
-                    randomChallenge();
-                }
                 try{
                 if (playerOneTree!=null){
+                    if (playerOneTree.getClass()==Btree.class){
+                        if (actualChallenge.deep == ((Btree)playerOneTree).root.n & !((Btree)playerOneTree).root.leaf ) {
+                            playerOnePoints = +actualChallenge.reward;
+                            randomChallenge();
+                        }
+                    }else if(playerOneTree.getClass()==AVL.class){
+                        if (actualChallenge.deep == ((AVL)playerOneTree).root.height) {
+                            playerOnePoints = +actualChallenge.reward;
+                            randomChallenge();
+                        }
+                    }else {
+                        if (actualChallenge.deep == playerOneTree.maxDepth(playerOneTree.root)) {
+                            playerOnePoints = +actualChallenge.reward;
+                            randomChallenge();
+                        }
+                    }
                     TestGrafics grafics= new TestGrafics();
                     grafics.playerTree=playerOneTree;
                     grafics.points=playerOnePoints;
                     grafics.player ="playerOneTree";
                     grafics.start();
+                    }
 
-                }} catch (Exception e) {
+                } catch (Exception e) {
                     logger.error("Error calling the grapich function"+e);
                 }
                 break;
             case 2:
                 playerTwoTree=checkTree(playerTwoTree,token);
-                if(actualChallenge.deep==playerTwoTree.maxDepth(playerTwoTree.root)){
-                    playerTwoPoints=+actualChallenge.reward;
-                    randomChallenge();
-                }
                 try {
                     if (playerTwoTree != null) {
+                        if (playerTwoTree.getClass()==Btree.class){
+                            if (actualChallenge.deep == ((Btree)playerTwoTree).root.n & !((Btree)playerTwoTree).root.leaf ) {
+                                playerTwoPoints = +actualChallenge.reward;
+                                randomChallenge();
+                            }
+                        }else if(playerThreeTree.getClass()==AVL.class){
+                            if (actualChallenge.deep == ((AVL)playerTwoTree).root.height) {
+                                playerTwoPoints = +actualChallenge.reward;
+                                randomChallenge();
+                            }
+                        }else {
+                            if (actualChallenge.deep == playerTwoTree.maxDepth(playerTwoTree.root)) {
+                                playerTwoPoints = +actualChallenge.reward;
+                                randomChallenge();
+                            }
+                        }
                         TestGrafics grafics= new TestGrafics();
                         grafics.playerTree = playerTwoTree;
                         grafics.points=playerTwoPoints;
@@ -148,12 +173,26 @@ public class Server {
                 break;
             case 3:
                 playerThreeTree=checkTree(playerThreeTree,token);
-                if(actualChallenge.deep==playerThreeTree.maxDepth(playerThreeTree.root)){
-                    playerThreePoints=+actualChallenge.reward;
-                    randomChallenge();
-                }
+
                 try {
                     if (playerThreeTree != null) {
+                        if (playerThreeTree.getClass()==Btree.class){
+                            if (actualChallenge.deep == ((Btree)playerThreeTree).root.n & !((Btree)playerThreeTree).root.leaf ) {
+                                playerThreePoints = +actualChallenge.reward;
+                                randomChallenge();
+                            }
+                        }else if(playerThreeTree.getClass()==AVL.class){
+                            if (actualChallenge.deep == ((AVL)playerThreeTree).root.height) {
+                                playerThreePoints = +actualChallenge.reward;
+                                randomChallenge();
+                            }
+                        }else {
+
+                            if (actualChallenge.deep == playerThreeTree.maxDepth(playerThreeTree.root)) {
+                                playerThreePoints = +actualChallenge.reward;
+                                randomChallenge();
+                            }
+                        }
                         TestGrafics grafics= new TestGrafics();
                         grafics.playerTree = playerThreeTree;
                         grafics.points=playerThreePoints;
@@ -166,12 +205,25 @@ public class Server {
                 break;
             case 4:
                 playerfourthTree=checkTree(playerfourthTree,token);
-                if(actualChallenge.deep==playerfourthTree.maxDepth(playerfourthTree.root)){
-                    playerfourthPoints=+actualChallenge.reward;
-                    randomChallenge();
-                }
+
                 try {
                     if (playerfourthTree != null) {
+                        if (playerfourthTree.getClass()==Btree.class){
+                            if (actualChallenge.deep == ((Btree)playerfourthTree).root.n & !((Btree)playerfourthTree).root.leaf ) {
+                                playerfourthPoints = +actualChallenge.reward;
+                                randomChallenge();
+                            }
+                        }else if(playerfourthTree.getClass()==AVL.class){
+                            if (actualChallenge.deep == ((AVL)playerfourthTree).root.height) {
+                                playerfourthPoints = +actualChallenge.reward;
+                                randomChallenge();
+                            }
+                        }else {
+                            if (actualChallenge.deep == playerfourthTree.maxDepth(playerfourthTree.root)) {
+                                playerfourthPoints = +actualChallenge.reward;
+                                randomChallenge();
+                            }
+                        }
                         TestGrafics grafics= new TestGrafics();
                         grafics.playerTree = playerfourthTree;
                         grafics.points=playerfourthPoints;
