@@ -323,8 +323,12 @@ def game():
     done = False
     clock = pygame.time.Clock()
     cycle_count = 0
-    player1_img = pygame.image.load("playerOneTree.png")
-    player2_img = pygame.image.load("playerTwoTree.png")
+    player1_img = pygame.image.load("playerOneTree.png").convert()
+    player1_img.set_colorkey(WHITE)
+    player2_img = pygame.image.load("playerTwoTree.png").convert()
+    player2_img.set_colorkey(WHITE)
+    player1_img = pygame.transform.scale(player1_img, [400, 100])
+    player2_img = pygame.transform.scale(player2_img, [400, 100])
 
     j = pygame.joystick.Joystick(0)
     j.init()
@@ -527,8 +531,10 @@ def game():
             socket.send_msg(x.token.__dict__)
             socket.tokens.remove(x.token)
             player1_img.fill(TRANSPARENT)
-            player1_img = pygame.image.load("playerOneTree.png")
-            win.blit(player1_img, [1, 1])
+            player1_img = pygame.image.load("playerOneTree.png").convert()
+            player1_img.set_colorkey(WHITE)
+            player1_img = pygame.transform.scale(player1_img, [400, 100])
+            win.blit(player1_img, [1, 100])
             pygame.display.update()
         tokens_hit_list = None
         tokens_hit_list = pygame.sprite.spritecollide(player2, tokens_list, True)
@@ -537,8 +543,10 @@ def game():
             socket.send_msg(x.token.__dict__)
             socket.tokens.remove(x.token)
             player2_img.fill(TRANSPARENT)
-            player2_img = pygame.image.load("playerTwoTree.png")
-            win.blit(player2_img, [100, 200])
+            player2_img = pygame.image.load("playerTwoTree.png").convert()
+            player2_img.set_colorkey(WHITE)
+            player2_img = pygame.transform.scale(player2_img, [400, 100])
+            win.blit(player2_img, [800, 100])
             pygame.display.update()
 
         all_sprite_list.update()
@@ -594,8 +602,8 @@ def game():
         clock.tick(60)
         win.blit(contador, (1, 1))
         win.blit(challenge_tittle, (1, 50))
-        win.blit(player1_img, [0, 1])
-        win.blit(player2_img, [100, 200])
+        win.blit(player1_img, [0, 100])
+        win.blit(player2_img, [800, 100])
         pygame.display.flip()
         pygame.display.update()
 
