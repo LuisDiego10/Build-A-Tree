@@ -326,6 +326,9 @@ def game():
     player1_img = pygame.image.load("playerOneTree.png")
     player2_img = pygame.image.load("playerTwoTree.png")
 
+    j = pygame.joystick.Joystick(0)
+    j.init()
+
     # Cycle when the game is running
     while not done:
         check_msg()
@@ -357,6 +360,29 @@ def game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
+            if event.type == pygame.JOYBUTTONDOWN:
+                if j.get_button(13):
+                    player1.left()
+                if j.get_button(14):
+                    player1.right()
+                if j.get_button(11):
+                    player1.jump()
+                if j.get_button(2) and player1.normalhit == True and pygame.sprite.collide_rect(player1,player2):
+                    player2.rect.x += 40
+                    player2.rect.y -= 10
+                if j.get_button(0) and player1.forcepush == True and pygame.sprite.collide_rect(player1,
+                                                    player2):
+                    if player2.shield == True:
+                        player1.forcepush = False
+                        player2.shield = False
+                    else:
+                        player2.rect.x += 20
+                        player2.rect.y -= 50
+                        player2.beattacked = 40
+                        all_sprite_list.draw(win)
+                        player1.forcepush = False
+                    pygame.display.update()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     player1.left()
@@ -370,6 +396,7 @@ def game():
                     player2.right()
                 if event.key == pygame.K_w:
                     player2.jump()
+
 
                 # Powers logic
                 if pygame.sprite.collide_rect(player1, force_push):
