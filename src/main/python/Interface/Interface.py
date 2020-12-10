@@ -329,9 +329,11 @@ def game():
     player2_img.set_colorkey(WHITE)
     player1_img = pygame.transform.scale(player1_img, [400, 100])
     player2_img = pygame.transform.scale(player2_img, [400, 100])
-
-    j = pygame.joystick.Joystick(0)
-    j.init()
+    try:
+        j = pygame.joystick.Joystick(0)
+        j.init()
+    except:
+        print("ignoring  joystick")
 
     # Cycle when the game is running
     while not done:
@@ -371,11 +373,11 @@ def game():
                     player1.right()
                 if j.get_button(11):
                     player1.jump()
-                if j.get_button(2) and player1.normalhit == True and pygame.sprite.collide_rect(player1,player2):
+                if j.get_button(2) and player1.normalhit == True and pygame.sprite.collide_rect(player1, player2):
                     player2.rect.x += 40
                     player2.rect.y -= 10
                 if j.get_button(0) and player1.forcepush == True and pygame.sprite.collide_rect(player1,
-                                                    player2):
+                                                                                                player2):
                     if player2.shield == True:
                         player1.forcepush = False
                         player2.shield = False
@@ -400,7 +402,6 @@ def game():
                     player2.right()
                 if event.key == pygame.K_w:
                     player2.jump()
-
 
                 # Powers logic
                 if pygame.sprite.collide_rect(player1, force_push):
