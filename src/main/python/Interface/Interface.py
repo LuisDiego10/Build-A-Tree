@@ -335,7 +335,6 @@ def game():
     except:
         print("ignoring  joystick")
 
-
     # Cycle when the game is running
     while not done:
         check_msg()
@@ -536,8 +535,8 @@ def game():
             player1_img = pygame.image.load("playerOneTree.png").convert()
             player1_img.set_colorkey(WHITE)
             player1_img = pygame.transform.scale(player1_img, [400, 100])
-            win.blit(player1_img, [1, 100])
-            pygame.display.update()
+        win.blit(player1_img, [1, 100])
+        pygame.display.update()
         tokens_hit_list = None
         tokens_hit_list = pygame.sprite.spritecollide(player2, tokens_list, True)
         for x in tokens_hit_list:
@@ -548,8 +547,8 @@ def game():
             player2_img = pygame.image.load("playerTwoTree.png").convert()
             player2_img.set_colorkey(WHITE)
             player2_img = pygame.transform.scale(player2_img, [400, 100])
-            win.blit(player2_img, [800, 100])
-            pygame.display.update()
+        win.blit(player2_img, [800, 100])
+        pygame.display.update()
 
         all_sprite_list.update()
         levelact.update()
