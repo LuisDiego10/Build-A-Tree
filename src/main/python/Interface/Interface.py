@@ -335,6 +335,7 @@ def game():
     except:
         print("ignoring  joystick")
 
+
     # Cycle when the game is running
     while not done:
         check_msg()
@@ -446,7 +447,7 @@ def game():
                 # Powers
                 if event.key == pygame.K_l and player1.forcepush == True and pygame.sprite.collide_rect(player1,
                                                                                                         player2):
-                    if player2.shield == True:
+                    if player2.shield:
                         player1.forcepush = False
                         player2.shield = False
                     else:
@@ -459,7 +460,7 @@ def game():
 
                 if event.key == pygame.K_f and player2.forcepush == True and pygame.sprite.collide_rect(player2,
                                                                                                         player1):
-                    if player1.shield == True:
+                    if player1.shield:
                         player2.forcepush = False
                         player1.shield = False
                     else:
@@ -472,7 +473,7 @@ def game():
 
                 if event.key == pygame.K_k and player1.forcepush == True and pygame.sprite.collide_rect(player1,
                                                                                                         player2):
-                    if player2.shield == True:
+                    if player2.shield:
                         player1.forcepush = False
                         player2.shield = False
                     else:
@@ -485,7 +486,7 @@ def game():
 
                 if event.key == pygame.K_g and player2.forcepush == True and pygame.sprite.collide_rect(player2,
                                                                                                         player1):
-                    if player1.shield == True:
+                    if player1.shield:
                         player2.forcepush = False
                         player1.shield = False
                     else:
@@ -603,8 +604,6 @@ def game():
         clock.tick(60)
         win.blit(contador, (1, 1))
         win.blit(challenge_tittle, (1, 50))
-        win.blit(player1_img, [0, 100])
-        win.blit(player2_img, [800, 100])
         pygame.display.flip()
         pygame.display.update()
 
