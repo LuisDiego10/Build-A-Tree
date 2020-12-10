@@ -323,13 +323,6 @@ def game():
     done = False
     clock = pygame.time.Clock()
     cycle_count = 0
-    player1_img = pygame.image.load("playerOneTree.png").convert()
-    player1_img.set_colorkey(WHITE)
-    player2_img = pygame.image.load("playerTwoTree.png").convert()
-    player2_img.set_colorkey(WHITE)
-    player1_img = pygame.transform.scale(player1_img, [400, 100])
-    player2_img = pygame.transform.scale(player2_img, [400, 100])
-
     j = pygame.joystick.Joystick(0)
     j.init()
 
@@ -401,7 +394,6 @@ def game():
                 if event.key == pygame.K_w:
                     player2.jump()
 
-
                 # Powers logic
                 if pygame.sprite.collide_rect(player1, force_push):
                     player1.forcepush = True
@@ -445,7 +437,7 @@ def game():
                 # Powers
                 if event.key == pygame.K_l and player1.forcepush == True and pygame.sprite.collide_rect(player1,
                                                                                                         player2):
-                    if player2.shield == True:
+                    if player2.shield:
                         player1.forcepush = False
                         player2.shield = False
                     else:
@@ -458,7 +450,7 @@ def game():
 
                 if event.key == pygame.K_f and player2.forcepush == True and pygame.sprite.collide_rect(player2,
                                                                                                         player1):
-                    if player1.shield == True:
+                    if player1.shield:
                         player2.forcepush = False
                         player1.shield = False
                     else:
@@ -471,7 +463,7 @@ def game():
 
                 if event.key == pygame.K_k and player1.forcepush == True and pygame.sprite.collide_rect(player1,
                                                                                                         player2):
-                    if player2.shield == True:
+                    if player2.shield:
                         player1.forcepush = False
                         player2.shield = False
                     else:
@@ -484,7 +476,7 @@ def game():
 
                 if event.key == pygame.K_g and player2.forcepush == True and pygame.sprite.collide_rect(player2,
                                                                                                         player1):
-                    if player1.shield == True:
+                    if player1.shield:
                         player2.forcepush = False
                         player1.shield = False
                     else:
@@ -602,8 +594,6 @@ def game():
         clock.tick(60)
         win.blit(contador, (1, 1))
         win.blit(challenge_tittle, (1, 50))
-        win.blit(player1_img, [0, 100])
-        win.blit(player2_img, [800, 100])
         pygame.display.flip()
         pygame.display.update()
 
